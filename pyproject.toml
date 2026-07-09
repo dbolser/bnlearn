@@ -8,7 +8,7 @@ dynamic = ["version"]
 authors = [{ name = "Erdogan Taskesen", email = "erdogant@gmail.com" },]
 description = "bnlearn is a Python package for Causal Discovery by learning the graphical structure of Bayesian networks, parameter learning, inference and sampling methods."
 readme = "README.md"
-requires-python = ">=3"
+requires-python = ">=3.11"
 license = "MIT"
 keywords = ["Python", "causal discovery", "causal learning"]
 classifiers = [
@@ -24,6 +24,12 @@ classifiers = [
 
 dependencies = [
     "pgmpy==0.1.25",
+    # pgmpy 0.1.25 imports torch unconditionally at import time (pgmpy/global_vars.py),
+    # so torch is a hard runtime dependency. It is declared explicitly here to make the
+    # requirement visible and to bind it to the CPU-only PyTorch index configured under
+    # [tool.uv.sources] below. bnlearn does not use the GPU, so the default CUDA build
+    # (which pulls ~2 GB of nvidia-* wheels) is never needed.
+    "torch",
     "networkx>=2.7.1",
     "matplotlib>=3.3.4",
     "numpy>=1.24.1",
@@ -55,3 +61,16 @@ include-package-data = true
 
 [tool.setuptools.dynamic]
 version = { attr = "bnlearn.__version__" }
+
+# bnlearn pulls torch in transitively (via pgmpy) but never runs on the GPU. Resolve torch
+# from PyTorch's CPU-only index so `uv sync` / `uv pip install` skip the nvidia CUDA wheels.
+# These settings apply when installing bnlearn itself with uv; downstream projects that use
+# bnlearn as a dependency and also want the CPU build should mirror this block in their own
+# pyproject (uv does not propagate source overrides to consumers).
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
