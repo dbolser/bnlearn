@@ -68,7 +68,7 @@ version = { attr = "bnlearn.__version__" }
 # bnlearn as a dependency and also want the CPU build should mirror this block in their own
 # pyproject (uv does not propagate source overrides to consumers).
 [tool.uv.sources]
-torch = [{ index = "pytorch-cpu" }]
+torch = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
