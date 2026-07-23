@@ -90,8 +90,8 @@ __version__ = '0.14.1'
 
 import pgmpy
 # Check version pgmpy
-if version.parse(pgmpy.__version__) < version.parse("0.1.18"):
-    raise ImportError('[bnlearn] >Error: This release requires pgmpy to be version == 0.1.25. Try to: <pip install -U pgmpy==0.1.25>')
+if version.parse(pgmpy.__version__) < version.parse("1.1.2"):
+    raise ImportError('[bnlearn] >Error: This release requires pgmpy version >= 1.1.2. Try to: <pip install -U "pgmpy>=1.1.2,<1.2">')
 
 # Version check
 import matplotlib

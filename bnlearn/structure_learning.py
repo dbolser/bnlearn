@@ -12,22 +12,21 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Note: pgmpy 1.1 deprecates the estimator-style HillClimbSearch/PC in favour of
+# sklearn-style classes in pgmpy.causal_discovery with a different interface.
+# The estimator-style classes remain until pgmpy 1.3; the <1.2 pin covers us,
+# and switching APIs is deferred until the causal_discovery interface settles.
+# The score classes must come from pgmpy.estimators too: pgmpy 1.1 keeps two
+# parallel score hierarchies, and the estimator-style search classes only
+# accept scores from their own (pgmpy.estimators.StructureScore) lineage.
 from pgmpy.estimators import ExhaustiveSearch, HillClimbSearch, TreeSearch
-try:
-    from pgmpy.estimators import StructureScore
-except ImportError:
-    # Compatibility with older pgmpy releases.
-    from pgmpy.estimators.StructureScore import StructureScore
+from pgmpy.estimators import PC as ConstraintBasedEstimator
+from pgmpy.estimators import AIC, BDeu, BDs, BIC, K2, StructureScore
+from pgmpy.causal_discovery import ExpertKnowledge
 from pgmpy.models import NaiveBayes
 
 import lingam
 
-import pgmpy
-from packaging import version
-if version.parse(pgmpy.__version__)>=version.parse("0.1.13"):
-    from pgmpy.estimators import PC as ConstraintBasedEstimator
-else:
-    from pgmpy.estimators import ConstraintBasedEstimator
 
 import bnlearn
 
@@ -559,11 +558,14 @@ def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=
     # Set search algorithm
     model = ConstraintBasedEstimator(df)
 
-    # Estimate using chi_square
-    skel, seperating_sets = model.build_skeleton(significance_level=significance_level, ci_test=ci_test)
+    # Estimate the skeleton using the conditional-independence test. variant='stable'
+    # matches the pre-pgmpy-1.x default (1.x defaults to 'parallel').
+    skel, seperating_sets = model.build_skeleton(significance_level=significance_level, ci_test=ci_test, variant='stable', show_progress=verbose>=4)
 
     if verbose>=4: print("Undirected edges: ", skel.edges())
-    pdag = model.skeleton_to_pdag(skel, seperating_sets)
+    # pgmpy 1.x removed skeleton_to_pdag; estimate() with the matching return_type
+    # runs the same skeleton -> PDAG -> DAG pipeline.
+    pdag = model.estimate(significance_level=significance_level, ci_test=ci_test, variant='stable', return_type='pdag', show_progress=verbose>=4)
     if verbose>=4: print("PDAG edges: ", pdag.edges())
     dag = pdag.to_dag()
     if verbose>=4: print("DAG edges: ", dag.edges())
@@ -575,9 +577,8 @@ def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=
     out['dag'] = dag
     out['dag_edges'] = dag.edges()
 
-    # Search using "estimate()" method provides a shorthand for the three steps above and directly returns a "BayesianNetwork"
-    best_model = model.estimate(significance_level=significance_level)
-    out['model'] = best_model
+    # The fully oriented DAG from the pipeline above is the estimated model.
+    out['model'] = dag
 
     if verbose>=4: print(best_model.edges())
     return out
@@ -634,15 +635,21 @@ def _hillclimbsearch(df,
     # Set search algorithm
     model = HillClimbSearch(df)
 
-    # Compute best DAG
-    if bw_list_method=='edges':
-        if (black_list is not None) or (white_list is not None):
-            if verbose >= 3: print('[bnlearn] >Filter edges based on black_list/white_list')
-        # best_model = model.estimate()
-        best_model = model.estimate(scoring_method=scoring_method, start_dag=start_dag, max_indegree=max_indegree, tabu_length=tabu_length, epsilon=epsilon, max_iter=max_iter, black_list=black_list, white_list=white_list, fixed_edges=fixed_edges, show_progress=False)
-    else:
-        # At this point, variables are readily filtered based on bw_list_method or not (if nothing defined).
-        best_model = model.estimate(scoring_method=scoring_method, start_dag=start_dag, max_indegree=max_indegree, tabu_length=tabu_length, epsilon=epsilon, max_iter=max_iter, fixed_edges=fixed_edges, show_progress=False)
+    # Map bnlearn's black_list/white_list/fixed_edges onto pgmpy's ExpertKnowledge:
+    # forbidden_edges <- black_list, search_space <- white_list, required_edges <- fixed_edges.
+    expert_knowledge = None
+    use_edge_lists = bw_list_method=='edges'
+    if use_edge_lists and ((black_list is not None) or (white_list is not None)):
+        if verbose >= 3: print('[bnlearn] >Filter edges based on black_list/white_list')
+    if (use_edge_lists and (black_list or white_list)) or fixed_edges:
+        expert_knowledge = ExpertKnowledge(
+            forbidden_edges=black_list if use_edge_lists else None,
+            search_space=white_list if use_edge_lists else None,
+            required_edges=fixed_edges if fixed_edges else None,
+        )
+
+    # Compute best DAG. At this point, variables are readily filtered based on bw_list_method or not (if nothing defined).
+    best_model = model.estimate(scoring_method=scoring_method, start_dag=start_dag, max_indegree=max_indegree, tabu_length=tabu_length, epsilon=epsilon, max_iter=max_iter, expert_knowledge=expert_knowledge, show_progress=False)
 
     # Ensure isolated variables are retained in sparse or empty DAGs.
     best_model.add_nodes_from(df.columns)
@@ -751,15 +758,15 @@ def _SetScoringType(df, scoretype, verbose=3, **kwargs):
     if verbose>=3: print('[bnlearn] >Set scoring type at [%s]' %(scoretype))
 
     if scoretype=='bic':
-        scoring_method = pgmpy.estimators.BicScore(df)
+        scoring_method = BIC(df)
     elif scoretype=='k2':
-        scoring_method = pgmpy.estimators.K2Score(df)
+        scoring_method = K2(df)
     elif scoretype=='bdeu':
-        scoring_method = pgmpy.estimators.BDeuScore(df, equivalent_sample_size=5)
+        scoring_method = BDeu(df, equivalent_sample_size=5)
     elif scoretype=='bds':
-        scoring_method = pgmpy.estimators.BDsScore(df, equivalent_sample_size=5)
+        scoring_method = BDs(df, equivalent_sample_size=5)
     elif scoretype=='aic':
-        scoring_method = pgmpy.estimators.AICScore(df)
+        scoring_method = AIC(df)
     elif scoretype=='loglik-g':
         scoring_method = LogLikelihoodGauss(df, **kwargs)
     elif scoretype=='aic-g':
