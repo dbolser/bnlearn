@@ -580,7 +580,6 @@ def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=
     # The fully oriented DAG from the pipeline above is the estimated model.
     out['model'] = dag
 
-    if verbose>=4: print(best_model.edges())
     return out
 
 
