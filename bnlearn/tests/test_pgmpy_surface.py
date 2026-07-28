@@ -6,6 +6,10 @@ output shapes). The suite runs fully offline (sprinkler is built in code) and
 is the safety net for migrating off pgmpy==0.1.25: it must pass unchanged
 before and after the migration.
 """
+import os
+import shutil
+import tempfile
+
 import numpy as np
 import pytest
 
@@ -115,8 +119,19 @@ def test_predict(sprinkler_model, sprinkler_df):
     assert Pout['p'].between(0, 1).all()
 
 
-def test_save_load_roundtrip(tmp_path, sprinkler_model):
-    filepath = str(tmp_path / "model.pkl")
+@pytest.fixture
+def save_dir():
+    # pypickle >=2 silently refuses to write under "critical paths" (/var,
+    # /private, ...), and on macOS pytest's tmp_path resolves to
+    # /private/var/..., so bn.save() returns False there. Use a scratch
+    # directory under the working tree instead.
+    path = tempfile.mkdtemp(prefix="bnlearn_save_test_", dir=os.getcwd())
+    yield path
+    shutil.rmtree(path, ignore_errors=True)
+
+
+def test_save_load_roundtrip(save_dir, sprinkler_model):
+    filepath = os.path.join(save_dir, "model.pkl")
     assert bn.save(sprinkler_model, filepath=filepath, overwrite=True)
     loaded = bn.load(filepath)
     assert set(loaded['model'].edges()) == set(sprinkler_model['model'].edges())
