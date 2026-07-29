@@ -558,14 +558,15 @@ def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=
     # Set search algorithm
     model = ConstraintBasedEstimator(df)
 
-    # Estimate the skeleton using the conditional-independence test. variant='stable'
-    # matches the pre-pgmpy-1.x default (1.x defaults to 'parallel').
-    skel, seperating_sets = model.build_skeleton(significance_level=significance_level, ci_test=ci_test, variant='stable', show_progress=verbose>=4)
-
-    if verbose>=4: print("Undirected edges: ", skel.edges())
-    # pgmpy 1.x removed skeleton_to_pdag; estimate() with the matching return_type
-    # runs the same skeleton -> PDAG -> DAG pipeline.
+    # pgmpy 1.x removed skeleton_to_pdag; estimate() runs the whole
+    # skeleton -> PDAG pipeline, so the conditional-independence tests happen here.
+    # variant='stable' matches the pre-pgmpy-1.x default (1.x defaults to 'parallel').
     pdag = model.estimate(significance_level=significance_level, ci_test=ci_test, variant='stable', return_type='pdag', show_progress=verbose>=4)
+
+    # Orienting edges never changes adjacency, so the PDAG's undirected view is the
+    # skeleton. Deriving it here avoids a second, identical build_skeleton() pass.
+    skel = pdag.to_undirected()
+    if verbose>=4: print("Undirected edges: ", skel.edges())
     if verbose>=4: print("PDAG edges: ", pdag.edges())
     dag = pdag.to_dag()
     if verbose>=4: print("DAG edges: ", dag.edges())
