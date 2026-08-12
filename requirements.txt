@@ -11,6 +11,7 @@ packaging
 df2onehot
 pypickle
 tabulate
+scipy>=1.14.0
 lingam
 datazets>=1.1.2
 setgraphviz>=1.0.3

@@ -38,6 +38,7 @@ dependencies = [
     "tabulate",
     "datazets>=1.1.2",
     "setgraphviz>=1.0.3",
+    "scipy>=1.14.0",
     "lingam",
 ]
 
