@@ -12,5 +12,6 @@ df2onehot
 pypickle
 tabulate
 lingam<1.13 # 1.13.0 pins scipy<=1.13.1 (no py3.13 wheels -> from-source build fails)
+scipy>=1.14.0
 datazets>=1.1.2
 setgraphviz>=1.0.3

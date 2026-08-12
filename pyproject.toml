@@ -38,6 +38,7 @@ dependencies = [
     "tabulate",
     "datazets>=1.1.2",
     "setgraphviz>=1.0.3",
+    "scipy>=1.14.0",
     # lingam 1.13.0 pins scipy<=1.13.1, which has no Python 3.13 wheels and
     # forces a from-source scipy build (fails without OpenBLAS). Cap until
     # lingam lifts the scipy ceiling.
