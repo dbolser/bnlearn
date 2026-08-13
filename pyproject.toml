@@ -34,7 +34,7 @@ dependencies = [
     "python-louvain",
     "packaging",
     "df2onehot",
-    "pypickle",
+    "pypickle>=2.0.2",
     "tabulate",
     "datazets>=1.1.2",
     "setgraphviz>=1.0.3",

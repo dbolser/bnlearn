@@ -9,7 +9,7 @@ scikit-learn
 python-louvain
 packaging
 df2onehot
-pypickle
+pypickle>=2.0.2
 tabulate
 lingam<1.13 # 1.13.0 pins scipy<=1.13.1 (no py3.13 wheels -> from-source build fails)
 datazets>=1.1.2
