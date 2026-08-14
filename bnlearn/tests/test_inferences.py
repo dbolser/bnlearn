@@ -86,6 +86,37 @@ def test_inference_sprinkler_example():
 
 
 
+def test_inference_do_operator():
+    # Ground truth computed by hand from the sprinkler CPDs:
+    # P(W=1|S=1) weights Cloudy by P(C|S=1) (observation), whereas
+    # P(W=1|do(S=1)) cuts Cloudy->Sprinkler and weights by the prior P(C).
+    model = bn.import_DAG('sprinkler', verbose=0)
+
+    p1 = lambda q: float(q.df.loc[q.df['Wet_Grass'] == 1, 'p'].iloc[0])
+
+    observational = bn.inference.fit(model, variables=['Wet_Grass'], evidence={'Sprinkler': 1}, verbose=0)
+    assert p1(observational) == pytest.approx(0.927, abs=1e-3)
+
+    interventional = bn.inference.fit(model, variables=['Wet_Grass'], do={'Sprinkler': 1}, verbose=0)
+    assert p1(interventional) == pytest.approx(0.945, abs=1e-3)
+    assert abs(interventional.df['p'].sum() - 1.0) < 1e-6
+
+    # do and evidence combine: conditioning the intervened network on Cloudy=1
+    combined = bn.inference.fit(model, variables=['Wet_Grass'], do={'Sprinkler': 1}, evidence={'Cloudy': 1}, verbose=0)
+    assert p1(combined) == pytest.approx(0.972, abs=1e-3)
+
+    # interventions are labeled as do(X) in the readable summary
+    assert 'do(Sprinkler)=1' in interventional.text
+
+
+def test_inference_do_operator_validation():
+    model = bn.import_DAG('sprinkler', verbose=0)
+    with pytest.raises(Exception, match='do'):
+        bn.inference.fit(model, variables=['Wet_Grass'], do={'NotANode': 1}, verbose=0)
+    with pytest.raises(Exception, match='both'):
+        bn.inference.fit(model, variables=['Wet_Grass'], do={'Rain': 1}, evidence={'Rain': 1}, verbose=0)
+
+
 def test_make_DAG_naivebayes():
     edges = [('A', 'B'), ('A', 'C'), ('A', 'D')]
     DAG = bn.make_DAG(edges, methodtype='naivebayes')
