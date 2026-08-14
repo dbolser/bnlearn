@@ -20,7 +20,7 @@ Currently, the library supports parameter learning for *discrete* nodes:
 
 
 # %% Libraries
-from pgmpy.estimators import BayesianEstimator
+from pgmpy.parameter_estimator import DiscreteBayesianEstimator
 import bnlearn
 import copy
 import warnings
@@ -148,8 +148,9 @@ def fit(model, df, methodtype='bayes', scoretype='bdeu', smooth=None, n_jobs=-1,
             if config['verbose']>=2: print(cpd)
     elif config['method']=='bayes':
         #  Learning CPDs using Bayesian Parameter Estimation
-        model.fit(df, estimator=BayesianEstimator, prior_type=scoretype, equivalent_sample_size=1000, pseudo_counts=smooth, n_jobs=config['n_jobs'])
-        # model.fit(df, estimator=BayesianEstimator, prior_type="BDeu", equivalent_sample_size=1000, pseudo_counts=smooth)
+        # pgmpy 1.x expects an initialized estimator instance instead of a class plus kwargs.
+        estimator = DiscreteBayesianEstimator(prior_type=scoretype, equivalent_sample_size=1000, pseudo_counts=smooth, n_jobs=config['n_jobs'])
+        model.fit(df, estimator=estimator)
         for cpd in model.get_cpds():
             if config['verbose']>=2: print("[bnlearn] >CPD of {variable}:".format(variable=cpd.variable))
             if config['verbose']>=2: print(cpd)

@@ -2,7 +2,7 @@ import bnlearn as bn
 import pytest
 
 from pgmpy.estimators import TreeSearch
-from pgmpy.models import BayesianNetwork
+from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.inference import VariableElimination
 
 @pytest.fixture

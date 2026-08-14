@@ -22,10 +22,10 @@ from decimal import Decimal
 from itertools import product
 from collections import defaultdict
 
-from pgmpy.models import BayesianNetwork, NaiveBayes, MarkovNetwork
+from pgmpy.models import DiscreteBayesianNetwork, NaiveBayes, DiscreteMarkovNetwork
 from pgmpy.models import DynamicBayesianNetwork as DBN
 from pgmpy.factors.discrete import TabularCPD
-from pgmpy.metrics import structure_score
+from pgmpy.metrics import StructureScore
 
 from setgraphviz import setgraphviz
 from ismember import ismember
@@ -71,7 +71,7 @@ def to_bayesiannetwork(model, verbose=3):
     # Convert to vector
     vec = adjmat2vec(adjmat)[['source', 'target']].values.tolist()
     # Make BayesianNetwork
-    bayesianmodel = BayesianNetwork(vec)
+    bayesianmodel = DiscreteBayesianNetwork(vec)
     # Add any nodes from the adjmat that have no incoming or outgoing edges
     # (isolated nodes); otherwise they would silently disappear since
     # adjmat2vec() only returns edges.
@@ -222,7 +222,7 @@ def make_DAG(DAG, CPD=None, methodtype='bayes', isolated_nodes=None, checkmodel=
     elif isinstance(DAG, list) and methodtype == 'bayes':
         if verbose>=3: print('[bnlearn] >%s DAG created.' %(methodtype))
         edges = DAG
-        DAG = BayesianNetwork()
+        DAG = DiscreteBayesianNetwork()
         DAG.add_edges_from(edges)
         if isolated_nodes is not None: DAG.add_nodes_from(isolated_nodes)
         # DAG.add_nodes_from(CPD)
@@ -232,7 +232,7 @@ def make_DAG(DAG, CPD=None, methodtype='bayes', isolated_nodes=None, checkmodel=
         if verbose>=3: print(f'[bnlearn] >[{methodtype}] is not supported to store the CPTs in the model.')
         edges = DAG
         # DAG = MarkovNetwork(DAG)
-        DAG = MarkovNetwork()
+        DAG = DiscreteMarkovNetwork()
         DAG.add_edges_from(edges)
         if isolated_nodes is not None: DAG.add_nodes_from(isolated_nodes)
         # DAG.add_nodes_from(CPD)
@@ -346,8 +346,10 @@ def print_CPD(DAG, checkmodel=False, verbose=3):
         DAG = DAG.get('model', None)
 
     if ('markovnetwork' in str(type(DAG)).lower()):
-        if verbose>=3: print('[bnlearn] >Converting markovnetwork to Bayesian model')
-        DAG = DAG.to_bayesian_model()
+        # pgmpy 1.x removed MarkovNetwork.to_bayesian_model(); there is no
+        # equivalent conversion left to print CPDs from.
+        if verbose>=2: print('[bnlearn] >Warning: printing CPDs of a MarkovNetwork is no longer supported by pgmpy>=1.0. <return>')
+        return CPDs
 
     if 'maximumlikelihood' in str(type(DAG)).lower():
         # print CPDs using Maximum Likelihood Estimators
@@ -694,7 +696,7 @@ def _bif2bayesian(pathname, verbose=3):
     bifmodel = BIFReader(path=pathname)
 
     try:
-        model = BayesianNetwork(bifmodel.variable_edges)
+        model = DiscreteBayesianNetwork(bifmodel.variable_edges)
         model.name = bifmodel.network_name
         model.add_nodes_from(bifmodel.variable_names)
 
@@ -792,7 +794,7 @@ def _DAG_sprinkler(CPD=True):
 
     """
     # Define the network structure
-    model = BayesianNetwork([('Cloudy', 'Sprinkler'),
+    model = DiscreteBayesianNetwork([('Cloudy', 'Sprinkler'),
                            ('Cloudy', 'Rain'),
                            ('Sprinkler', 'Wet_Grass'),
                            ('Rain', 'Wet_Grass')])
@@ -1942,6 +1944,15 @@ def load(filepath='bnlearn_model.pkl', verbose=3):
     # mods = pypickle.validate_modules(filepath)
     model = pypickle.load(filepath, verbose=convert_verbose_to_new(verbose), validate=['builtins.int'])
 
+    # Models pickled under pgmpy 0.x (bnlearn<=0.13.x) resolve to pgmpy 1.x's bare
+    # tombstone classes: unpickling succeeds silently but returns a half-broken
+    # object that fails unpredictably later, so refuse it here with a clear message.
+    if isinstance(model, dict):
+        loaded_model = model.get('model', None)
+        if type(loaded_model).__name__ in ('BayesianNetwork', 'MarkovNetwork') and type(loaded_model).__module__.startswith('pgmpy'):
+            if verbose>=1: print('[bnlearn] >Error: [%s] was saved with bnlearn<=0.13.x (pgmpy 0.x) and cannot be loaded under pgmpy>=1.0. Re-learn and re-save the model with the current version, or load it using an older release: <pip install "bnlearn<0.14">' %(filepath))
+            return None
+
     # Store in self
     if model is not None:
         return model
@@ -2003,16 +2014,16 @@ def independence_test(model, df, test="chi_square", alpha=0.05, prune=False, ver
 
     """
     # Imports
-    from pgmpy.models import BayesianNetwork
+    from pgmpy.models import DiscreteBayesianNetwork
     from pgmpy.base import DAG
     from lingam import DirectLiNGAM, ICALiNGAM
 
     # Set params
     if model.get('model', None) is None: raise ValueError('[bnlearn]> No model detected.')
-    if not isinstance(model['model'], (DAG, BayesianNetwork, DirectLiNGAM, ICALiNGAM)): raise ValueError("[bnlearn]> model must be an instance of pgmpy.base.DAG or pgmpy.models.BayesianNetwork. Got {type(model)}")
-    if not isinstance(df, pd.DataFrame): raise ValueError("[bnlearn]> data must be a pandas.DataFrame instance. Got {type(data)}")
-    if isinstance(model['model'], (DAG, BayesianNetwork)):
-        if not np.all(np.isin(model['model'].nodes(), df.columns)): raise ValueError("[bnlearn]> Missing columns in data. Can't find values for the following variables: { set(model.nodes()) - set(data.columns) }")
+    if not isinstance(model['model'], (DAG, DiscreteBayesianNetwork, DirectLiNGAM, ICALiNGAM)): raise ValueError(f"[bnlearn]> model must be an instance of pgmpy.base.DAG or pgmpy.models.DiscreteBayesianNetwork. Got {type(model['model'])}")
+    if not isinstance(df, pd.DataFrame): raise ValueError(f"[bnlearn]> data must be a pandas.DataFrame instance. Got {type(df)}")
+    if isinstance(model['model'], (DAG, DiscreteBayesianNetwork)):
+        if not np.all(np.isin(model['model'].nodes(), df.columns)): raise ValueError(f"[bnlearn]> Missing columns in data. Can't find values for the following variables: {set(model['model'].nodes()) - set(df.columns)}")
 
     # Get a copy of the model
     model_update = copy.deepcopy(model)
@@ -2194,7 +2205,9 @@ def structure_scores(model, df, scoring_method=['k2', 'bic', 'bdeu', 'bds'], ver
                     scoring_object = bn.structure_learning._SetScoringType(df, s, verbose=0, **kwargs)
                     scores[s] = scoring_object.score(model)
                 else:
-                    scores[s] = structure_score(model, df, scoring_method=s)
+                    # pgmpy 1.x disambiguated 'bic'/'aic' into discrete ('-d') and
+                    # gaussian ('-g') variants; keep accepting the historic names.
+                    scores[s] = StructureScore(scoring_method={'bic': 'bic-d', 'aic': 'aic-d'}.get(s, s)).evaluate(df, model)
             except (ValueError, TypeError, np.linalg.LinAlgError) as e:
                 if verbose>=2 and show_message:
                     print(f'[bnlearn] >WARNING> {e}')

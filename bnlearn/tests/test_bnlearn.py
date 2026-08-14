@@ -117,7 +117,7 @@ def test_import_DAG():
     # TEST 2: Check model output is unchanged
     assert DAG['adjmat'].sum().sum() == 4
     # TEST 3:
-    assert 'pgmpy.models.BayesianNetwork' in str(type(DAG['model']))
+    assert 'bayesiannetwork' in str(type(DAG['model'])).lower()
     # TEST 4:
     # DAG = bn.import_DAG('alarm', verbose=0)
     # assert DAG.keys() == {'model', 'adjmat'}
@@ -134,7 +134,7 @@ def test_make_DAG():
         DAG = bn.make_DAG(edges, methodtype=methodtype)
         # TEST 1
         if methodtype == 'bayes':
-            assert 'pgmpy.models.BayesianNetwork' in str(type(DAG['model']))
+            assert 'bayesiannetwork' in str(type(DAG['model'])).lower()
         else:
             assert 'pgmpy.models.NaiveBayes.NaiveBayes' in str(type(DAG['model']))
     # TEST 2

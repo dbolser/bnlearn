@@ -1,4 +1,4 @@
-pgmpy==0.1.25 # This is needed because above this version all kinds of third party google and LLM stuff is imported that we do not need.
+pgmpy>=1.1.2,<1.2 # >=1.1 makes torch/litellm optional extras; <1.2 guards against pgmpy API churn between minors.
 networkx>=2.7.1
 matplotlib>=3.3.4
 numpy>=1.24.1

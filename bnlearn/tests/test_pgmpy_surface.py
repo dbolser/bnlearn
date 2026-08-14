@@ -7,6 +7,7 @@ is the safety net for migrating off pgmpy==0.1.25: it must pass unchanged
 before and after the migration.
 """
 import os
+import pickle
 import shutil
 import tempfile
 
@@ -138,6 +139,20 @@ def test_save_load_roundtrip(save_dir, sprinkler_model):
     orig = {cpd.variable: cpd.values for cpd in sprinkler_model['model'].get_cpds()}
     for cpd in loaded['model'].get_cpds():
         assert np.allclose(cpd.values, orig[cpd.variable])
+
+
+def test_load_rejects_pgmpy_0x_pickle(save_dir, sprinkler_model):
+    # Models saved under pgmpy 0.x pickle the class path
+    # pgmpy.models.BayesianNetwork.BayesianNetwork, which in pgmpy 1.x resolves
+    # to a bare tombstone class: unpickling succeeds silently but yields a
+    # half-broken object. bn.load() must refuse it rather than hand it back.
+    from pgmpy.models.BayesianNetwork import BayesianNetwork
+    zombie = BayesianNetwork.__new__(BayesianNetwork)
+    zombie.__dict__.update(sprinkler_model['model'].__dict__)
+    filepath = os.path.join(save_dir, "legacy_model.pkl")
+    with open(filepath, "wb") as f:
+        pickle.dump({'model': zombie, 'adjmat': sprinkler_model['adjmat']}, f)
+    assert bn.load(filepath, verbose=0) is None
 
 
 def test_structure_scores_all_discrete_methods(sprinkler_model, sprinkler_df):
