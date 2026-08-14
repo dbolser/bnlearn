@@ -14,7 +14,6 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-# import logging
 
 from pathlib import Path
 from tqdm import tqdm
@@ -357,7 +356,7 @@ def print_CPD(DAG, checkmodel=False, verbose=3):
     elif ('bayesiannetwork' in str(type(DAG)).lower()) or ('naivebayes' in str(type(DAG)).lower()):
         # print CPDs using Bayesian Parameter Estimation
         if len(DAG.get_cpds())==0:
-            if verbose>=2: print('[bnlearn] >No CPDs to print. Hint: Add CPDs as following: <bn.make_DAG(DAG, CPD=[cpd_A, cpd_B, etc])> and use bnlearn.plot(DAG) to make a plot.')
+            if verbose>=2: print('[bnlearn] >No CPDs to print. Hint: Add CPDs as following: <bn.make_DAG(DAG, CPD=[cpd_A, cpd_B, etc])> and use bn.plot(DAG) to make a plot.')
             return CPDs
         for cpd in DAG.get_cpds():
             CPDs[cpd.variable] = query2df(cpd, verbose=0)
@@ -877,7 +876,7 @@ def compare_networks(model_1, model_2, pos=None, showfig=True, figsize=(15, 8), 
         adjmat_diff : Adjacency matrix depicting the differences between the two input models.
 
     """
-    scores, adjmat_diff = bnlearn.network.compare_networks(model_1['adjmat'], model_2['adjmat'], pos=pos, showfig=showfig, width=figsize[0], height=figsize[1], verbose=verbose)
+    scores, adjmat_diff = bn.network.compare_networks(model_1['adjmat'], model_2['adjmat'], pos=pos, showfig=showfig, width=figsize[0], height=figsize[1], verbose=verbose)
     return(scores, adjmat_diff)
 
 
@@ -1318,9 +1317,9 @@ def plot(model,
 
     # Get node and edge properties if not user-defined
     if node_properties is None:
-        node_properties = bnlearn.get_node_properties(model, node_size=node_size_default)
+        node_properties = bn.get_node_properties(model, node_size=node_size_default)
     if edge_properties is None:
-        edge_properties = bnlearn.get_edge_properties(model, minscale=params_static['minscale'], maxscale=params_static['maxscale'])
+        edge_properties = bn.get_edge_properties(model, minscale=params_static['minscale'], maxscale=params_static['maxscale'])
 
     # Set default node size based on interactive True/False
     for key in node_properties.keys():
@@ -1373,16 +1372,16 @@ def plot(model,
             if verbose>=3: print('[bnlearn] >Plot based on Bayesian model')
             # positions for all nodes
             # G = nx.DiGraph(model['adjmat'])
-            pos = bnlearn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
+            pos = bn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
         elif 'networkx' in str(type(bnmodel)):
             if verbose>=3: print('[bnlearn] >Plot based on networkx model')
             G = bnmodel
-            pos = bnlearn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
+            pos = bn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
         else:
             if verbose>=3: print('[bnlearn] >Plot based on adjacency matrix')
-            G = bnlearn.network.adjmat2graph(model['adjmat'].abs()>0)
+            G = bn.network.adjmat2graph(model['adjmat'].abs()>0)
             # Get positions
-            pos = bnlearn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
+            pos = bn.network.graphlayout(G, pos=pos, scale=scale, layout=params_static['layout'], verbose=verbose)
 
         # Make static plot
         fig = _plot_static(model,
@@ -1638,7 +1637,7 @@ def import_example(data='sprinkler', url=None, sep=',', n=10000, verbose=3):
     if (data=='alarm') or (data=='andes') or (data=='asia') or (data=='sachs') or (data=='water'):
         try:
             DAG = import_DAG(data, verbose=2)
-            df = bnlearn.sampling(DAG, n=n, verbose=2)
+            df = bn.sampling(DAG, n=n, verbose=2)
         except ValueError as e:
             print(f'[bnlearn] >Error: Loading data not possible! - {e}')
             df = None
@@ -1850,7 +1849,7 @@ def predict(model, df, variables, to_df=True, method='max', verbose=3):
         # Get input data and create a dict.
         # evidence = dfU.iloc[i, :].to_dict()
         # Do the inference.
-        query = bnlearn.inference.fit(model, variables=variables, evidence=evidence, to_df=False, verbose=0)
+        query = bn.inference.fit(model, variables=variables, evidence=evidence, to_df=False, verbose=0)
         # Find original location of the input data.
         # loc = np.sum((dfX==dfU.iloc[i, :]).values, axis=1)==dfU_shape
         loc = np.sum(dfX.values==[*evidence.values()], axis=1)==dfU_shape
@@ -1879,7 +1878,7 @@ def _get_prob(query, method='max'):
         out = dict(zip(query.variables, comb))
         out['p']=p
     else:
-        out = bnlearn.query2df(query).to_dict()
+        out = bn.query2df(query).to_dict()
     return out
 
 
@@ -1962,7 +1961,7 @@ def independence_test(model, df, test="chi_square", alpha=0.05, prune=False, ver
 
     Parameters
     ----------
-    model: Instance of bnlearn.structure_learning.
+    model: Instance of bn.structure_learning.
         The (learned) model which needs to be tested.
     df: pandas.DataFrame instance
         The dataset against which to test the model structure.
@@ -2003,10 +2002,12 @@ def independence_test(model, df, test="chi_square", alpha=0.05, prune=False, ver
     >>> 3       Rain  Wet_Grass       True  3.886511e-64  285.901702    1
 
     """
-    from pgmpy.estimators.CITests import chi_square, g_sq, log_likelihood, freeman_tuckey, modified_log_likelihood, neyman, cressie_read  # noqa
+    # Imports
     from pgmpy.models import BayesianNetwork
     from pgmpy.base import DAG
     from lingam import DirectLiNGAM, ICALiNGAM
+
+    # Set params
     if model.get('model', None) is None: raise ValueError('[bnlearn]> No model detected.')
     if not isinstance(model['model'], (DAG, BayesianNetwork, DirectLiNGAM, ICALiNGAM)): raise ValueError("[bnlearn]> model must be an instance of pgmpy.base.DAG or pgmpy.models.BayesianNetwork. Got {type(model)}")
     if not isinstance(df, pd.DataFrame): raise ValueError("[bnlearn]> data must be a pandas.DataFrame instance. Got {type(data)}")
@@ -2029,14 +2030,14 @@ def independence_test(model, df, test="chi_square", alpha=0.05, prune=False, ver
         p_value = p_value[p_value * model['adjmat'].abs() > 0].fillna(value=1)
 
         # out['independence_test'] = p_value
-        independence_test = bnlearn.adjmat2vec(p_value, min_weight=0)
+        independence_test = bn.adjmat2vec(p_value, min_weight=0)
         independence_test.rename(columns={'weight': 'p_value'}, inplace=True)
         independence_test['dof'] = 1
         model_update['independence_test'] = independence_test
         # Set the significant edges to True
         model_update['independence_test']['stat_test'] = model_update['independence_test']['p_value'] <= alpha
     else:
-        if verbose>=3: print('[bnlearn] >Compute edge strength with [%s]' %(test))
+        if verbose>=3: print(f'[bnlearn] >Compute edge strength with {test}')
         # Get the statistical test
         statistical_test = eval(test)
         # Compute significance
@@ -2088,7 +2089,7 @@ def _prune(model, test, alpha, verbose=3):
             model['independence_test'].reset_index(inplace=True, drop=True)
             model['model_edges'] = list(zip(model['independence_test']['source'], model['independence_test']['target']))
             # Update adjmat
-            correction_matrix = bnlearn.vec2adjmat(model['independence_test']['source'], model['independence_test']['target'])
+            correction_matrix = bn.vec2adjmat(model['independence_test']['source'], model['independence_test']['target'])
             # Sort the correction_matrix index and columns to match adjmat
             correction_matrix = correction_matrix.reindex(index=model['adjmat'].index, columns=model['adjmat'].columns)
             # Update the adjmat
@@ -2190,7 +2191,7 @@ def structure_scores(model, df, scoring_method=['k2', 'bic', 'bdeu', 'bds'], ver
         for s in scoring_method:
             try:
                 if s in gaussian_scores:
-                    scoring_object = bnlearn.structure_learning._SetScoringType(df, s, verbose=0, **kwargs)
+                    scoring_object = bn.structure_learning._SetScoringType(df, s, verbose=0, **kwargs)
                     scores[s] = scoring_object.score(model)
                 else:
                     scores[s] = structure_score(model, df, scoring_method=s)
@@ -2475,7 +2476,7 @@ def system_info():
     import networkx as nx
     import matplotlib
     import pgmpy
-    import bnlearn
+    import bnlearn as bn
 
     # Detect forced backend due to Windows + Python >= 3.12 fix
     _is_windows = platform.system() == "Windows"
@@ -2487,7 +2488,7 @@ def system_info():
     print("--------------------------------------------------")
     print(f"OS                : {platform.system()} {platform.release()}")
     print(f"Python version    : {sys.version.split()[0]}")
-    print(f"bnlearn version   : {bnlearn.__version__}")
+    print(f"bnlearn version   : {bn.__version__}")
     print(f"pgmpy version     : {pgmpy.__version__}")
     print(f"numpy version     : {np.__version__}")
     print(f"networkx version  : {nx.__version__}")
