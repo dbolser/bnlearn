@@ -53,4 +53,6 @@ jobs:
         run: uvx twine check --strict dist/*
 
       - name: Smoke-test the wheel
-        run: uv run --isolated --no-project --with dist/*.whl python -c "import bnlearn; print(bnlearn.__version__)"
+        # python -I keeps the checkout's ./bnlearn off sys.path, so the import
+        # genuinely exercises the wheel rather than the source tree.
+        run: uv run --isolated --no-project --with dist/*.whl python -I -c "import bnlearn; print(bnlearn.__version__)"
