@@ -2011,10 +2011,10 @@ def independence_test(model, df, test="chi_square", alpha=0.05, prune=False, ver
 
     # Set params
     if model.get('model', None) is None: raise ValueError('[bnlearn]> No model detected.')
-    if not isinstance(model['model'], (DAG, DiscreteBayesianNetwork, DirectLiNGAM, ICALiNGAM)): raise ValueError("[bnlearn]> model must be an instance of pgmpy.base.DAG or pgmpy.models.DiscreteBayesianNetwork. Got {type(model)}")
-    if not isinstance(df, pd.DataFrame): raise ValueError("[bnlearn]> data must be a pandas.DataFrame instance. Got {type(data)}")
+    if not isinstance(model['model'], (DAG, DiscreteBayesianNetwork, DirectLiNGAM, ICALiNGAM)): raise ValueError(f"[bnlearn]> model must be an instance of pgmpy.base.DAG or pgmpy.models.DiscreteBayesianNetwork. Got {type(model['model'])}")
+    if not isinstance(df, pd.DataFrame): raise ValueError(f"[bnlearn]> data must be a pandas.DataFrame instance. Got {type(df)}")
     if isinstance(model['model'], (DAG, DiscreteBayesianNetwork)):
-        if not np.all(np.isin(model['model'].nodes(), df.columns)): raise ValueError("[bnlearn]> Missing columns in data. Can't find values for the following variables: { set(model.nodes()) - set(data.columns) }")
+        if not np.all(np.isin(model['model'].nodes(), df.columns)): raise ValueError(f"[bnlearn]> Missing columns in data. Can't find values for the following variables: {set(model['model'].nodes()) - set(df.columns)}")
 
     # Get a copy of the model
     model_update = copy.deepcopy(model)
