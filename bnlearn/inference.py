@@ -10,7 +10,7 @@
 """
 # %% Libraries
 import matplotlib.pyplot as plt
-from pgmpy.inference import CausalInference, VariableElimination
+from pgmpy.inference import VariableElimination
 import numpy as np
 import bnlearn
 import warnings
@@ -21,13 +21,13 @@ warnings.filterwarnings("ignore")
 def fit(model,
         variables=None,
         evidence=None,
-        do=None,
         to_df=True,
         elimination_order='greedy',
         joint=True,
         groupby=None,
         plot=False,
         verbose=3,
+        do=None,
         ):
     """Inference using using Variable Elimination.
 
@@ -49,11 +49,12 @@ def fit(model,
             * {'Rain':1}
             * {'Rain':1, 'Sprinkler':0, 'Cloudy':1}
     do : dict, optional
-        Interventions for causal inference, P(variables | do(do), evidence).
+        Interventions for causal inference, P(variables | do(X=x), evidence).
         Whereas evidence conditions on passively observed values, do simulates
         setting the variable by intervention: incoming edges of the intervened
         variables are cut (Pearl's do-operator, comparable to mutilated() in the
-        R version of bnlearn). The default is None.
+        R version of bnlearn). The query runs on the mutilated network, so it
+        combines freely with evidence and the other query options. The default is None.
             * {'Sprinkler':1}
     to_df : Bool, (default is True)
         The output is converted in the dataframe [query.df]. Enabling this function may impact the processing speed.
@@ -129,20 +130,29 @@ def fit(model,
         model = bnlearn.to_bayesiannetwork(adjmat, verbose=verbose)
 
     try:
-        model_infer = CausalInference(model) if do else VariableElimination(model)
+        if do:
+            # Query the mutilated network (incoming edges of the intervened nodes
+            # are cut) with the interventions fixed as evidence. This is exact for
+            # any mix of do and evidence, including interventions on causally
+            # related nodes, where pgmpy's adjustment-based CausalInference.query
+            # is not, and it keeps elimination_order/joint applicable.
+            model = model.do(list(do.keys()))
+        model_infer = VariableElimination(model)
     except ValueError as e:
         raise Exception(f'[bnlearn] >Error: {e}')
         # Input model does not contain learned CPDs. hint: did you run parameter_learning.fit()?
 
-    # Computing the probability P(class | do, evidence)
-    if do:
-        # CausalInference adjusts for the intervention (Pearl's do-operator) and
-        # always returns the joint distribution; elimination_order/joint do not apply.
-        query = model_infer.query(variables=variables, do=do, evidence=evidence, inference_algo='ve', show_progress=(verbose>=3))
-    else:
-        query = model_infer.query(variables=variables, evidence=evidence, elimination_order=elimination_order, joint=joint, show_progress=(verbose>=3))
+    # Computing the probability P(class | do, evidence): in the mutilated network,
+    # fixing the intervened variables as evidence equals intervening on them.
+    query_evidence = {**do, **(evidence or {})} if do else evidence
+    query = model_infer.query(variables=variables, evidence=query_evidence, elimination_order=elimination_order, joint=joint, show_progress=(verbose>=3))
 
     # Store dataframe in query
+    if isinstance(query, dict):
+        # joint=False returns a dict of per-variable factors; there is no single
+        # joint table to attach a dataframe or summary to. (Attaching attributes
+        # to the dict raised AttributeError before, so this also unbreaks joint=False.)
+        return query
     if to_df or plot:
         # Convert to Dataframe
         query.df = bnlearn.query2df(query, variables=variables, groupby=groupby, verbose=verbose)

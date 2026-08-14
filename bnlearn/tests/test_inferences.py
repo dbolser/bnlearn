@@ -92,7 +92,8 @@ def test_inference_do_operator():
     # P(W=1|do(S=1)) cuts Cloudy->Sprinkler and weights by the prior P(C).
     model = bn.import_DAG('sprinkler', verbose=0)
 
-    p1 = lambda q: float(q.df.loc[q.df['Wet_Grass'] == 1, 'p'].iloc[0])
+    def p1(query):
+        return float(query.df.loc[query.df['Wet_Grass'] == 1, 'p'].iloc[0])
 
     observational = bn.inference.fit(model, variables=['Wet_Grass'], evidence={'Sprinkler': 1}, verbose=0)
     assert p1(observational) == pytest.approx(0.927, abs=1e-3)
@@ -105,8 +106,39 @@ def test_inference_do_operator():
     combined = bn.inference.fit(model, variables=['Wet_Grass'], do={'Sprinkler': 1}, evidence={'Cloudy': 1}, verbose=0)
     assert p1(combined) == pytest.approx(0.972, abs=1e-3)
 
+    # Evidence on a variable outside the intervention's adjustment set: in the
+    # mutilated network Wet_Grass depends only on its parents, so this is
+    # exactly P(W=1|S=1,R=1)=0.99 from the CPT. (pgmpy's adjustment-based
+    # CausalInference.query returns 0.9612 here.)
+    outside = bn.inference.fit(model, variables=['Wet_Grass'], do={'Sprinkler': 1}, evidence={'Rain': 1}, verbose=0)
+    assert p1(outside) == pytest.approx(0.99, abs=1e-6)
+
+    # The other query options keep working with do
+    marginals = bn.inference.fit(model, variables=['Wet_Grass', 'Rain'], do={'Sprinkler': 1}, joint=False, to_df=False, verbose=0)
+    assert set(marginals.keys()) == {'Wet_Grass', 'Rain'}
+
     # interventions are labeled as do(X) in the readable summary
     assert 'do(Sprinkler)=1' in interventional.text
+
+
+def test_inference_do_operator_related_targets():
+    # Intervening on causally related nodes (A is a parent of B): the mutilated
+    # network holds both fixed, so P(C=1|do(A=1),do(B=1)) = P(C=1|A=1,B=1) = 1.
+    # (pgmpy's adjustment-based CausalInference.query returns 0.7 here.)
+    edges = [('A', 'B'), ('A', 'C'), ('B', 'C')]
+    cpt_a = TabularCPD(variable='A', variable_card=2, values=[[0.6], [0.4]])
+    cpt_b = TabularCPD(variable='B', variable_card=2,
+                       values=[[0.7, 0.2],
+                               [0.3, 0.8]],
+                       evidence=['A'], evidence_card=[2])
+    cpt_c = TabularCPD(variable='C', variable_card=2,
+                       values=[[0.5, 0.5, 0.5, 0.0],
+                               [0.5, 0.5, 0.5, 1.0]],
+                       evidence=['A', 'B'], evidence_card=[2, 2])
+    model = bn.make_DAG(edges, CPD=[cpt_a, cpt_b, cpt_c], verbose=0)
+
+    query = bn.inference.fit(model, variables=['C'], do={'A': 1, 'B': 1}, verbose=0)
+    assert float(query.df.loc[query.df['C'] == 1, 'p'].iloc[0]) == pytest.approx(1.0, abs=1e-6)
 
 
 def test_inference_do_operator_validation():
