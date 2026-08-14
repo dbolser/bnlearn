@@ -8,6 +8,8 @@ bnlearn/data/
 julia/
 bnlearn/RESOURCES/
 blogs/
+.claude
+CLAUDE.md
 
 *.pkl
 .pypirc

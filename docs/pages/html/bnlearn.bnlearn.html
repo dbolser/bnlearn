@@ -87,9 +87,9 @@
 <p class="caption" role="heading"><span class="caption-text">Continuous Data</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Continuous%20Data.html">Modelling Continuous Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Continuous%20Data.html#linear-gaussian-bayesian-networks">Linear Gaussian Bayesian Networks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Continuous%20Data.html#lingam-based-methods">LiNGAM-based Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Continuous%20Data.html#pc-method">PC Method</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Continuous%20Data.html#linear-gaussian-bayesian-networks">Linear Gaussian Bayesian Networks</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Predict</span></p>
 <ul>
@@ -263,7 +263,7 @@ False: Keep as is</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bnlearn.bnlearn.build_cpts_from_structure">
-<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">build_cpts_from_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_card</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rulebook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.build_cpts_from_structure" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">build_cpts_from_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_card</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rulebook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isolated_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.build_cpts_from_structure" title="Link to this definition"></a></dt>
 <dd><p>Automatically generates placeholder CPTs for all nodes in a network structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -272,6 +272,8 @@ False: Keep as is</p></li>
 <li><p><strong>variable_card</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of values each variable can take (default is 2).</p></li>
 <li><p><strong>rulebook</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of {node: callable} functions returning probabilities.
 Each function must return either a float (binary) or a list of probabilities summing to 1.</p></li>
+<li><p><strong>isolated_nodes</strong> (<em>list</em><em>, </em><em>optional</em>) – Nodes that have no incoming or outgoing edges but that should still be
+part of the model (and therefore need a placeholder marginal CPT).</p></li>
 <li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Verbosity level (default is 3).</p></li>
 </ul>
 </dd>
@@ -292,6 +294,9 @@ Each function must return either a float (binary) or a list of probabilities sum
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create DAG with default CPD values</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="n">CPD</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Include a node that has no edges at all</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CPD</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">build_cpts_from_structure</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">isolated_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Windy&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -575,11 +580,16 @@ adjmat_diff : Adjacency matrix depicting the differences between the two input m
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bnlearn.bnlearn.get_parents">
-<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">get_parents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.get_parents" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">get_parents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edges</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isolated_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.get_parents" title="Link to this definition"></a></dt>
 <dd><p>Build a dictionary mapping each node to its list of parents based on edges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>edges</strong> (<em>list</em><em> of </em><em>tuple</em>) – A list of (parent, child) tuples defining the DAG structure.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edges</strong> (<em>list</em><em> of </em><em>tuple</em>) – A list of (parent, child) tuples defining the DAG structure.</p></li>
+<li><p><strong>isolated_nodes</strong> (<em>list</em><em>, </em><em>optional</em>) – Nodes that should be part of the DAG but that have no incoming or
+outgoing edges (i.e., they do not appear in <code class="docutils literal notranslate"><span class="pre">edges</span></code>). These are
+added to the returned dictionary with an empty parent list.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A dictionary mapping each node to its list of parents. Nodes with no parents are included with an empty list.</p>
@@ -595,6 +605,10 @@ adjmat_diff : Adjacency matrix depicting the differences between the two input m
 <span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bn</span><span class="o">.</span><span class="n">get_parents</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># {&#39;Rain&#39;: [&#39;Cloudy&#39;], &#39;Sprinkler&#39;: [&#39;Cloudy&#39;], &#39;Cloudy&#39;: []}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Also register a node that has no edges at all</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bn</span><span class="o">.</span><span class="n">get_parents</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">isolated_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Windy&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># {&#39;Rain&#39;: [&#39;Cloudy&#39;], &#39;Sprinkler&#39;: [&#39;Cloudy&#39;], &#39;Cloudy&#39;: [], &#39;Windy&#39;: []}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -693,7 +707,7 @@ Any two variables are associated if the test’s p-value &lt; significance_level
 <dd class="field-odd"><p>The (learned) model which needs to be tested.</p>
 </dd>
 <dt class="field-even">type model<span class="colon">:</span></dt>
-<dd class="field-even"><p>Instance of bnlearn.structure_learning.</p>
+<dd class="field-even"><p>Instance of bn.structure_learning.</p>
 </dd>
 <dt class="field-odd">param df<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dataset against which to test the model structure.</p>
@@ -776,7 +790,7 @@ considered uncorrelated.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="bnlearn.bnlearn.make_DAG">
-<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">make_DAG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CPD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bayes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkmodel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.make_DAG" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">bnlearn.bnlearn.</span></span><span class="sig-name descname"><span class="pre">make_DAG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">DAG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CPD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methodtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bayes'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isolated_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkmodel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bnlearn.bnlearn.make_DAG" title="Link to this definition"></a></dt>
 <dd><p>Create Directed Acyclic Graph based on list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -790,6 +804,11 @@ considered uncorrelated.</p>
 <li><p>’DBN’: DynamicBayesianNetwork</p></li>
 </ul>
 </p></li>
+<li><p><strong>isolated_nodes</strong> (<em>list</em><em>, </em><em>optional</em>) – Nodes that should be added to the DAG even though they have no
+incoming or outgoing edges. This is useful, for example, when
+building a ground-truth graph to evaluate causal discovery methods
+(accuracy/precision/recall), where some variables may not be
+connected to anything. The default is None.</p></li>
 <li><p><strong>checkmodel</strong> (<em>bool</em>) – Check the validity of the model. The default is True</p></li>
 <li><p><strong>verbose</strong> (<em>int</em><em>, </em><em>optional</em>) – Print progress to screen. The default is 3.
 0: None, 1: ERROR, 2: WARN, 3: INFO (default), 4: DEBUG, 5: TRACE</p></li>
@@ -840,6 +859,16 @@ considered uncorrelated.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span> <span class="o">=</span> <span class="p">[((</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="p">((</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="p">((</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;DBN&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add nodes that are not connected to anything (e.g. a ground-truth</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># graph for scoring a causal discovery method)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">isolated_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DAG</span><span class="p">[</span><span class="s1">&#39;adjmat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;]</span>
 </pre></div>
 </div>
 </dd></dl>

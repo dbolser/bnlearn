@@ -88,6 +88,12 @@
 <p class="caption" role="heading"><span class="caption-text">Continuous Data</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Modelling Continuous Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#linear-gaussian-bayesian-networks">Linear Gaussian Bayesian Networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#multivariate-gaussian-log-likelihood">Multivariate Gaussian log-likelihood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aic-gaussian">AIC-Gaussian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bic-gaussian">BIC-Gaussian</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#lingam-based-methods">LiNGAM-based Methods</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#toy-example">Toy Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#direct-lingam-method">Direct-LiNGAM Method</a></li>
@@ -95,12 +101,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#pc-method">PC Method</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#linear-gaussian-bayesian-networks">Linear Gaussian Bayesian Networks</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#multivariate-gaussian-log-likelihood">Multivariate Gaussian log-likelihood</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aic-gaussian">AIC-Gaussian</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#bic-gaussian">BIC-Gaussian</a></li>
-</ul>
-</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Predict</span></p>
 <ul>
@@ -187,39 +187,100 @@
              
   <section id="modelling-continuous-datasets">
 <h1>Modelling Continuous Datasets<a class="headerlink" href="#modelling-continuous-datasets" title="Link to this heading"></a></h1>
-<p>Learning Bayesian Networks from continuous data is more challenging than learning from purely discrete variables because most Bayesian network algorithms were originally developed for categorical probability distributions. In practice, there are several approaches to model continuous and hybrid datasets, each making different assumptions about the underlying data.</p>
+<p>Learning Bayesian Networks from continuous data is more challenging than learning from purely discrete variables.
+In practice, there are several approaches to model continuous and hybrid datasets, each making different assumptions about the underlying data.</p>
 <p>In <code class="docutils literal notranslate"><span class="pre">bnlearn</span></code>, the following options are available to work with continuous datasets:</p>
-<ol class="arabic">
+<ol class="arabic simple">
 <li><dl class="simple">
-<dt>Manual discretization</dt><dd><p>Convert continuous variables into discrete categories using domain knowledge or predefined thresholds. This provides full control over the discretization process and is often preferred when meaningful boundaries are known.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>Probability density fitting</dt><dd><p>Fit an appropriate probability distribution to each continuous variable and discretize the data based on the estimated density.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>Bayesian discretization</dt><dd><p>Automatically discretize continuous variables using a principled Bayesian discretization algorithm that considers the dependency structure of the network.</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt>Linear Gaussian Bayesian Networks</dt><dd><p>Learn the network structure directly from continuous data without discretization by assuming that each variable follows a Gaussian distribution conditioned on its parents. Parent-child relationships are modelled using linear regression, making this approach suitable for continuous datasets with approximately linear dependencies.</p>
-<dl class="simple">
-<dt>The following score-based structure learning methods are supported:</dt><dd><ul class="simple">
+<dt>Analyze directly your continuous variables using Gaussian Bayesian Networks.</dt><dd><ul class="simple">
+<li><p>Learn the network structure directly from continuous data without discretization by assuming that each variable follows a Gaussian distribution conditioned on its parents. Parent-child relationships are modelled using linear regression, making this approach suitable for continuous datasets with approximately linear dependencies.</p></li>
 <li><p>loglik-g — Multivariate Gaussian log-likelihood.</p></li>
 <li><p>aic-g — Akaike Information Criterion (AIC) for Gaussian Bayesian Networks.</p></li>
 <li><p>bic-g — Bayesian Information Criterion (BIC) for Gaussian Bayesian Networks.</p></li>
 </ul>
 </dd>
 </dl>
+</li>
+<li><dl class="simple">
+<dt>Probability density discretization.</dt><dd><ul class="simple">
+<li><p>Fit an appropriate probability distribution to each continuous variable and discretize the data based on the estimated density.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Bayesian discretization.</dt><dd><ul class="simple">
+<li><p>Automatically discretize continuous variables using a principled Bayesian discretization algorithm that considers the dependency structure of the network.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Expert-knowledge discretization.</dt><dd><ul class="simple">
+<li><p>Discretization your data based on expert knowledge by thresholding manually. This provides full control over the discretization process and is often preferred when meaningful boundaries are known.</p></li>
+</ul>
 </dd>
 </dl>
 </li>
 </ol>
 <p>The Gaussian scores are available for score-based structure learning algorithms such as Hill Climbing and Exhaustive Search, and provide an alternative to discretization when the assumptions of a linear Gaussian model are appropriate.</p>
+</section>
+<section id="linear-gaussian-bayesian-networks">
+<h1>Linear Gaussian Bayesian Networks<a class="headerlink" href="#linear-gaussian-bayesian-networks" title="Link to this heading"></a></h1>
+<p>An alternative to discretizing continuous variables is to model them directly using a <strong>Linear Gaussian Bayesian Network (LGBN)</strong>.
+In this approach, every variable is assumed to follow a Gaussian distribution conditioned on its parent variables, where the conditional mean is modelled as a linear combination of the parents.</p>
+<p>More formally, for a variable <span class="math notranslate nohighlight">\(X_i\)</span> with parents <span class="math notranslate nohighlight">\(Pa(X_i)\)</span>, the model assumes</p>
+<div class="math notranslate nohighlight">
+\[X_i = \beta_0 + \sum_{j \in Pa(X_i)} \beta_j X_j + \epsilon,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal{N}(0,\sigma^2)\)</span> is Gaussian noise.
+The structure learning algorithm searches for the directed acyclic graph (DAG) that maximizes a decomposable scoring function computed from these local linear regressions.</p>
+<section id="multivariate-gaussian-log-likelihood">
+<h2>Multivariate Gaussian log-likelihood<a class="headerlink" href="#multivariate-gaussian-log-likelihood" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>loglik-g</cite> — <strong>Multivariate Gaussian log-likelihood</strong>. Maximizes the likelihood of the observed data under the assumed linear Gaussian model. Since model complexity is not penalized, this score generally prefers denser networks and is therefore primarily useful for evaluating or comparing fixed network structures.</p></li>
+</ul>
+</section>
+<section id="aic-gaussian">
+<h2>AIC-Gaussian<a class="headerlink" href="#aic-gaussian" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>aic-g</cite> — <strong>Akaike Information Criterion (AIC)</strong>. Extends the Gaussian log-likelihood with a complexity penalty based on the number of estimated parameters. Compared to BIC, AIC typically favours slightly larger and more complex networks.</p></li>
+</ul>
+</section>
+<section id="bic-gaussian">
+<h2>BIC-Gaussian<a class="headerlink" href="#bic-gaussian" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>bic-g</cite> — <strong>Bayesian Information Criterion (BIC)</strong>. Applies a stronger complexity penalty that increases with the sample size, often resulting in sparser network structures. BIC is generally the preferred default score for continuous Bayesian network structure learning.</p></li>
+</ul>
+<p>These Gaussian score functions can be used with score-based structure learning algorithms such as <strong>Hill Climbing</strong> and <strong>Exhaustive Search</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import libraries</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
+
+<span class="c1"># Load dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;auto_mpg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Perform structure learning</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">&#39;bic-g&#39;</span><span class="p">)</span>
+<span class="c1"># model = bn.structure_learning.fit(df, methodtype=&#39;hc&#39;, scoretype=&#39;aic-g&#39;)</span>
+<span class="c1"># model = bn.structure_learning.fit(df, methodtype=&#39;hc&#39;, scoretype=&#39;loglik-g&#39;)</span>
+
+<span class="c1"># Compute edge strength</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create visualizations</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">dotgraph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="n">dotgraph</span>
+<span class="n">dotgraph</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;dotgraph_auto_mpg_bic_g&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Linear Gaussian Bayesian Networks provide an attractive alternative to discretization when the relationships between variables are approximately linear and the Gaussian assumption is reasonable. When these assumptions are violated, discretization or more advanced hybrid Bayesian network models may provide better results.</p>
+<table class="docutils align-center">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/dotgraph_auto_mpg_bic_g.png"><img alt="fig6a" height="516" src="_images/dotgraph_auto_mpg_bic_g.png" width="360" /></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
 </section>
 <section id="lingam-based-methods">
 <h1>LiNGAM-based Methods<a class="headerlink" href="#lingam-based-methods" title="Link to this heading"></a></h1>
@@ -446,62 +507,6 @@
 </tr>
 </tbody>
 </table>
-</section>
-<section id="linear-gaussian-bayesian-networks">
-<h1>Linear Gaussian Bayesian Networks<a class="headerlink" href="#linear-gaussian-bayesian-networks" title="Link to this heading"></a></h1>
-<p>An alternative to discretizing continuous variables is to model them directly using a <strong>Linear Gaussian Bayesian Network (LGBN)</strong>.
-In this approach, every variable is assumed to follow a Gaussian distribution conditioned on its parent variables, where the conditional mean is modelled as a linear combination of the parents.</p>
-<p>More formally, for a variable <span class="math notranslate nohighlight">\(X_i\)</span> with parents <span class="math notranslate nohighlight">\(Pa(X_i)\)</span>, the model assumes</p>
-<div class="math notranslate nohighlight">
-\[X_i = \beta_0 + \sum_{j \in Pa(X_i)} \beta_j X_j + \epsilon,\]</div>
-<p>where <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal{N}(0,\sigma^2)\)</span> is Gaussian noise.
-The structure learning algorithm searches for the directed acyclic graph (DAG) that maximizes a decomposable scoring function computed from these local linear regressions.</p>
-<section id="multivariate-gaussian-log-likelihood">
-<h2>Multivariate Gaussian log-likelihood<a class="headerlink" href="#multivariate-gaussian-log-likelihood" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><cite>loglik-g</cite> — <strong>Multivariate Gaussian log-likelihood</strong>. Maximizes the likelihood of the observed data under the assumed linear Gaussian model. Since model complexity is not penalized, this score generally prefers denser networks and is therefore primarily useful for evaluating or comparing fixed network structures.</p></li>
-</ul>
-</section>
-<section id="aic-gaussian">
-<h2>AIC-Gaussian<a class="headerlink" href="#aic-gaussian" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><cite>aic-g</cite> — <strong>Akaike Information Criterion (AIC)</strong>. Extends the Gaussian log-likelihood with a complexity penalty based on the number of estimated parameters. Compared to BIC, AIC typically favours slightly larger and more complex networks.</p></li>
-</ul>
-</section>
-<section id="bic-gaussian">
-<h2>BIC-Gaussian<a class="headerlink" href="#bic-gaussian" title="Link to this heading"></a></h2>
-<ul class="simple">
-<li><p><cite>bic-g</cite> — <strong>Bayesian Information Criterion (BIC)</strong>. Applies a stronger complexity penalty that increases with the sample size, often resulting in sparser network structures. BIC is generally the preferred default score for continuous Bayesian network structure learning.</p></li>
-</ul>
-<p>These Gaussian score functions can be used with score-based structure learning algorithms such as <strong>Hill Climbing</strong> and <strong>Exhaustive Search</strong>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import libraries</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
-
-<span class="c1"># Load dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;auto_mpg&#39;</span><span class="p">)</span>
-
-<span class="c1"># Perform structure learning</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">&#39;bic-g&#39;</span><span class="p">)</span>
-<span class="c1"># model = bn.structure_learning.fit(df, methodtype=&#39;hc&#39;, scoretype=&#39;aic-g&#39;)</span>
-<span class="c1"># model = bn.structure_learning.fit(df, methodtype=&#39;hc&#39;, scoretype=&#39;loglik-g&#39;)</span>
-
-<span class="c1"># Compute edge strength</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Create visualizations</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="n">dotgraph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-<span class="n">dotgraph</span>
-<span class="n">dotgraph</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;dotgraph_auto_mpg_bic_g&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Linear Gaussian Bayesian Networks provide an attractive alternative to discretization when the relationships between variables are approximately linear and the Gaussian assumption is reasonable. When these assumptions are violated, discretization or more advanced hybrid Bayesian network models may provide better results.</p>
-<table class="docutils align-center">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_images/dotgraph_auto_mpg_bic_g.png"><img alt="fig6a" height="516" src="_images/dotgraph_auto_mpg_bic_g.png" width="360" /></a></p></td>
-</tr>
-</tbody>
-</table>
 <hr>
 <center>
         <script async src="https://media.ethicalads.io/media/client/ethicalads.min.js"></script>
@@ -510,7 +515,6 @@ The structure learning algorithm searches for the directed acyclic graph (DAG) t
         <div data-ea-publisher="erdogantgithubio" data-ea-type="image" data-ea-style="stickybox"></div>
 </center>
 <hr></section>
-</section>
 
 
            </div>

@@ -1,25 +1,99 @@
 Modelling Continuous Datasets
 =========================================
 
-Learning Bayesian Networks from continuous data is more challenging than learning from purely discrete variables because most Bayesian network algorithms were originally developed for categorical probability distributions. In practice, there are several approaches to model continuous and hybrid datasets, each making different assumptions about the underlying data.
+Learning Bayesian Networks from continuous data is more challenging than learning from purely discrete variables.
+In practice, there are several approaches to model continuous and hybrid datasets, each making different assumptions about the underlying data.
 
 In ``bnlearn``, the following options are available to work with continuous datasets:
 
-1. Manual discretization
-    Convert continuous variables into discrete categories using domain knowledge or predefined thresholds. This provides full control over the discretization process and is often preferred when meaningful boundaries are known.
-2. Probability density fitting
-    Fit an appropriate probability distribution to each continuous variable and discretize the data based on the estimated density.
-3. Bayesian discretization
-    Automatically discretize continuous variables using a principled Bayesian discretization algorithm that considers the dependency structure of the network.
-4. Linear Gaussian Bayesian Networks
-    Learn the network structure directly from continuous data without discretization by assuming that each variable follows a Gaussian distribution conditioned on its parents. Parent-child relationships are modelled using linear regression, making this approach suitable for continuous datasets with approximately linear dependencies.
-
-    The following score-based structure learning methods are supported:
-        * loglik-g — Multivariate Gaussian log-likelihood.
-        * aic-g — Akaike Information Criterion (AIC) for Gaussian Bayesian Networks.
-        * bic-g — Bayesian Information Criterion (BIC) for Gaussian Bayesian Networks.
+1. Analyze directly your continuous variables using Gaussian Bayesian Networks.
+    * Learn the network structure directly from continuous data without discretization by assuming that each variable follows a Gaussian distribution conditioned on its parents. Parent-child relationships are modelled using linear regression, making this approach suitable for continuous datasets with approximately linear dependencies.
+    * loglik-g — Multivariate Gaussian log-likelihood.
+    * aic-g — Akaike Information Criterion (AIC) for Gaussian Bayesian Networks.
+    * bic-g — Bayesian Information Criterion (BIC) for Gaussian Bayesian Networks.
+2. Probability density discretization.
+    * Fit an appropriate probability distribution to each continuous variable and discretize the data based on the estimated density.
+3. Bayesian discretization.
+    * Automatically discretize continuous variables using a principled Bayesian discretization algorithm that considers the dependency structure of the network.
+4. Expert-knowledge discretization.
+    * Discretization your data based on expert knowledge by thresholding manually. This provides full control over the discretization process and is often preferred when meaningful boundaries are known.
 
 The Gaussian scores are available for score-based structure learning algorithms such as Hill Climbing and Exhaustive Search, and provide an alternative to discretization when the assumptions of a linear Gaussian model are appropriate.
+
+
+
+
+Linear Gaussian Bayesian Networks
+=========================================
+
+An alternative to discretizing continuous variables is to model them directly using a **Linear Gaussian Bayesian Network (LGBN)**.
+In this approach, every variable is assumed to follow a Gaussian distribution conditioned on its parent variables, where the conditional mean is modelled as a linear combination of the parents.
+
+More formally, for a variable :math:`X_i` with parents :math:`Pa(X_i)`, the model assumes
+
+.. math::
+
+    X_i = \beta_0 + \sum_{j \in Pa(X_i)} \beta_j X_j + \epsilon,
+
+where :math:`\epsilon \sim \mathcal{N}(0,\sigma^2)` is Gaussian noise. 
+The structure learning algorithm searches for the directed acyclic graph (DAG) that maximizes a decomposable scoring function computed from these local linear regressions.
+
+
+Multivariate Gaussian log-likelihood
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* `loglik-g` — **Multivariate Gaussian log-likelihood**. Maximizes the likelihood of the observed data under the assumed linear Gaussian model. Since model complexity is not penalized, this score generally prefers denser networks and is therefore primarily useful for evaluating or comparing fixed network structures.
+
+AIC-Gaussian
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* `aic-g` — **Akaike Information Criterion (AIC)**. Extends the Gaussian log-likelihood with a complexity penalty based on the number of estimated parameters. Compared to BIC, AIC typically favours slightly larger and more complex networks.
+
+BIC-Gaussian
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* `bic-g` — **Bayesian Information Criterion (BIC)**. Applies a stronger complexity penalty that increases with the sample size, often resulting in sparser network structures. BIC is generally the preferred default score for continuous Bayesian network structure learning.
+
+These Gaussian score functions can be used with score-based structure learning algorithms such as **Hill Climbing** and **Exhaustive Search**:
+
+
+.. code-block:: python
+
+    # Import libraries
+    import bnlearn as bn
+    
+    # Load dataset
+    df = bn.import_example(data='auto_mpg')
+
+    # Perform structure learning
+    model = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic-g')
+    # model = bn.structure_learning.fit(df, methodtype='hc', scoretype='aic-g')
+    # model = bn.structure_learning.fit(df, methodtype='hc', scoretype='loglik-g')
+    
+    # Compute edge strength
+    model = bn.independence_test(model, df, prune=True)
+
+    # Create visualizations
+    bn.plot(model)
+    dotgraph = bn.plot_graphviz(model)
+    dotgraph
+    dotgraph.view(filename=r'dotgraph_auto_mpg_bic_g')
+
+Linear Gaussian Bayesian Networks provide an attractive alternative to discretization when the relationships between variables are approximately linear and the Gaussian assumption is reasonable. When these assumptions are violated, discretization or more advanced hybrid Bayesian network models may provide better results.
+
+
+.. |fig6a| image:: ../figs/dotgraph_auto_mpg_bic_g.png
+   :scale: 50%
+
+.. table::
+   :align: center
+
+   +----------+
+   | |fig6a|  |
+   +----------+
+
+
+
 
 
 LiNGAM-based Methods
@@ -265,75 +339,6 @@ PC PDAG construction is only guaranteed to work under the assumption that the id
    | |fig5b|  |
    +----------+
 
-
-Linear Gaussian Bayesian Networks
-=========================================
-
-An alternative to discretizing continuous variables is to model them directly using a **Linear Gaussian Bayesian Network (LGBN)**.
-In this approach, every variable is assumed to follow a Gaussian distribution conditioned on its parent variables, where the conditional mean is modelled as a linear combination of the parents.
-
-More formally, for a variable :math:`X_i` with parents :math:`Pa(X_i)`, the model assumes
-
-.. math::
-
-    X_i = \beta_0 + \sum_{j \in Pa(X_i)} \beta_j X_j + \epsilon,
-
-where :math:`\epsilon \sim \mathcal{N}(0,\sigma^2)` is Gaussian noise. 
-The structure learning algorithm searches for the directed acyclic graph (DAG) that maximizes a decomposable scoring function computed from these local linear regressions.
-
-
-Multivariate Gaussian log-likelihood
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* `loglik-g` — **Multivariate Gaussian log-likelihood**. Maximizes the likelihood of the observed data under the assumed linear Gaussian model. Since model complexity is not penalized, this score generally prefers denser networks and is therefore primarily useful for evaluating or comparing fixed network structures.
-
-AIC-Gaussian
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* `aic-g` — **Akaike Information Criterion (AIC)**. Extends the Gaussian log-likelihood with a complexity penalty based on the number of estimated parameters. Compared to BIC, AIC typically favours slightly larger and more complex networks.
-
-BIC-Gaussian
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* `bic-g` — **Bayesian Information Criterion (BIC)**. Applies a stronger complexity penalty that increases with the sample size, often resulting in sparser network structures. BIC is generally the preferred default score for continuous Bayesian network structure learning.
-
-These Gaussian score functions can be used with score-based structure learning algorithms such as **Hill Climbing** and **Exhaustive Search**:
-
-
-.. code-block:: python
-
-    # Import libraries
-    import bnlearn as bn
-    
-    # Load dataset
-    df = bn.import_example(data='auto_mpg')
-
-    # Perform structure learning
-    model = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic-g')
-    # model = bn.structure_learning.fit(df, methodtype='hc', scoretype='aic-g')
-    # model = bn.structure_learning.fit(df, methodtype='hc', scoretype='loglik-g')
-    
-    # Compute edge strength
-    model = bn.independence_test(model, df, prune=True)
-
-    # Create visualizations
-    bn.plot(model)
-    dotgraph = bn.plot_graphviz(model)
-    dotgraph
-    dotgraph.view(filename=r'dotgraph_auto_mpg_bic_g')
-
-Linear Gaussian Bayesian Networks provide an attractive alternative to discretization when the relationships between variables are approximately linear and the Gaussian assumption is reasonable. When these assumptions are violated, discretization or more advanced hybrid Bayesian network models may provide better results.
-
-
-.. |fig6a| image:: ../figs/dotgraph_auto_mpg_bic_g.png
-   :scale: 50%
-
-.. table::
-   :align: center
-
-   +----------+
-   | |fig6a|  |
-   +----------+
 
 
 
