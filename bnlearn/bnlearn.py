@@ -35,6 +35,7 @@ import pypickle
 import bnlearn as bn
 from bnlearn.sampling import sampling as bn_sampling
 from bnlearn.CITests import chi_square, g_sq, log_likelihood, freeman_tuckey, modified_log_likelihood, neyman, cressie_read
+        
 
 # %%  Convert adjmat to bayesian model
 def to_bayesiannetwork(model, verbose=3):

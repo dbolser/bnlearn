@@ -77,8 +77,7 @@ def test_parameter_learning_maximum_likelihood(sprinkler_df):
 
 
 def test_structure_learning_naivebayes(sprinkler_df):
-    model = bn.structure_learning.fit(sprinkler_df, methodtype='naivebayes',
-                                      root_node='Wet_Grass', verbose=0)
+    model = bn.structure_learning.fit(sprinkler_df, methodtype='naivebayes', root_node='Wet_Grass', verbose=0)
     edges = list(model['model'].edges())
     assert len(edges) == 3
     assert all(source == 'Wet_Grass' for source, _ in edges)

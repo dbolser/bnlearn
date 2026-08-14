@@ -347,8 +347,16 @@ def compare_networks(adjmat_true, adjmat_pred, pos=None, showfig=True, width=15,
     y_pred = adjmat_pred.stack().reset_index()[0].values
 
     # Confusion matrix
-    scores=bnlearn.confmatrix.twoclass(y_true, y_pred, threshold=0.5, classnames=['Disconnected', 'Connected'], title='', cmap=plt.cm.Blues, showfig=1, verbose=0)
-    #bayes.plot(out_bayes['adjmat'], pos=G['pos'])
+    scores = bnlearn.confmatrix.twoclass(
+        y_true,
+        y_pred,
+        threshold=0.5,
+        classnames=['Disconnected', 'Connected'],
+        title='',
+        cmap=plt.cm.Blues,
+        showfig=showfig,
+        verbose=0
+    )
 
     # Setup graph
     adjmat_diff = adjmat_true.astype(int)
