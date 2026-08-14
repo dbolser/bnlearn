@@ -19,15 +19,16 @@ import matplotlib.pyplot as plt
 # The score classes must come from pgmpy.estimators too: pgmpy 1.1 keeps two
 # parallel score hierarchies, and the estimator-style search classes only
 # accept scores from their own (pgmpy.estimators.StructureScore) lineage.
+
 from pgmpy.estimators import ExhaustiveSearch, HillClimbSearch, TreeSearch
-from pgmpy.estimators import PC as ConstraintBasedEstimator
 from pgmpy.estimators import AIC, BDeu, BDs, BIC, K2, StructureScore
 from pgmpy.causal_discovery import ExpertKnowledge
 from pgmpy.models import NaiveBayes
 
+# from pgmpy import causal_discovery
+from pgmpy.estimators import PC as ConstraintBasedEstimator
+
 import lingam
-
-
 import bnlearn
 
 
@@ -516,6 +517,90 @@ def _treesearch(df, estimator_type, root_node, class_node=None, n_jobs=-1, verbo
 
 
 # %% Constraint-based Structure Learning
+# def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=-1, verbose=3):
+#     """Constraint-based structure learning using pgmpy's causal_discovery.PC.
+
+#     The PC algorithm first identifies an undirected skeleton using conditional
+#     independence tests, then orients the edges to obtain a PDAG representing
+#     the Markov equivalence class, and finally converts the PDAG to a DAG.
+
+#     Parameters
+#     ----------
+#     df : pandas.DataFrame
+#         Dataset used for structure learning.
+#     significance_level : float, default=0.05
+#         Significance level used for conditional independence tests.
+#     ci_test : str, default='chi_square'
+#         Conditional independence test. Supported tests depend on the
+#         installed pgmpy version, e.g.:
+#             - 'chi_square'
+#             - 'g_sq'
+#             - 'pearsonr'
+#             - 'log_likelihood'
+#             - 'freeman_tuckey'
+#             - 'modified_log_likelihood'
+#             - 'neyman'
+#             - 'cressie_read'
+#             - 'power_divergence'
+#     n_jobs : int, default=-1
+#         Number of parallel jobs. The PC implementation controls parallelism.
+#     verbose : int, default=3
+#         Verbosity level.
+
+#     Returns
+#     -------
+#     dict
+#         Dictionary containing the undirected skeleton, PDAG, and DAG.
+#     """
+    
+#     if verbose >= 3:print(f'[bnlearn] >Build skeleton with [{ci_test}] and alpha={significance_level}')
+
+#     # ------------------------------------------------------------------
+#     # PC structure learning
+#     # ------------------------------------------------------------------
+#     model = causal_discovery.PC(
+#         variant="parallel",
+#         ci_test=ci_test,
+#         significance_level=significance_level)
+
+#     # Estimate the complete PC graph.
+#     pdag = model.estimate(
+#         variant="parallel",
+#         return_type="pdag",
+#         show_progress=verbose >= 4)
+
+#     # ------------------------------------------------------------------
+#     # Skeleton
+#     # ------------------------------------------------------------------
+#     # The undirected version of the PDAG represents the learned skeleton.
+#     skel = pdag.to_undirected()
+
+#     if verbose >= 4:
+#         print("Undirected edges: ", list(skel.edges()))
+#         print("PDAG edges: ", list(pdag.edges()))
+
+#     # ------------------------------------------------------------------
+#     # Convert PDAG to DAG
+#     # ------------------------------------------------------------------
+#     dag = pdag.to_dag()
+#     if verbose >= 4: print("DAG edges: ", list(dag.edges()))
+
+#     # ------------------------------------------------------------------
+#     # Output
+#     # ------------------------------------------------------------------
+#     out = {
+#         'undirected': skel,
+#         'undirected_edges': skel.edges(),
+#         'pdag': pdag,
+#         'pdag_edges': pdag.edges(),
+#         'dag': dag,
+#         'dag_edges': dag.edges(),
+#         'model': dag,
+#     }
+
+#     return out
+
+# %% Constraint-based Structure Learning
 def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=-1, verbose=3):
     """Contrain search.
 
@@ -563,8 +648,6 @@ def _constraintsearch(df, significance_level=0.05, ci_test='chi_square', n_jobs=
     # variant='stable' matches the pre-pgmpy-1.x default (1.x defaults to 'parallel').
     pdag = model.estimate(significance_level=significance_level, ci_test=ci_test, variant='stable', return_type='pdag', show_progress=verbose>=4)
 
-    # Orienting edges never changes adjacency, so the PDAG's undirected view is the
-    # skeleton. Deriving it here avoids a second, identical build_skeleton() pass.
     skel = pdag.to_undirected()
     if verbose>=4: print("Undirected edges: ", skel.edges())
     if verbose>=4: print("PDAG edges: ", pdag.edges())
