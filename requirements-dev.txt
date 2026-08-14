@@ -8,5 +8,4 @@ irelease
 sphinxcontrib-fulltoc
 tabulate
 nbconvert # jupyter nbconvert --to html notebook.ipynb
-scipy>=1.14.0
 pyarrow
