@@ -1944,6 +1944,15 @@ def load(filepath='bnlearn_model.pkl', verbose=3):
     # mods = pypickle.validate_modules(filepath)
     model = pypickle.load(filepath, verbose=convert_verbose_to_new(verbose), validate=['builtins.int'])
 
+    # Models pickled under pgmpy 0.x (bnlearn<=0.13.x) resolve to pgmpy 1.x's bare
+    # tombstone classes: unpickling succeeds silently but returns a half-broken
+    # object that fails unpredictably later, so refuse it here with a clear message.
+    if isinstance(model, dict):
+        loaded_model = model.get('model', None)
+        if type(loaded_model).__name__ in ('BayesianNetwork', 'MarkovNetwork') and type(loaded_model).__module__.startswith('pgmpy'):
+            if verbose>=1: print('[bnlearn] >Error: [%s] was saved with bnlearn<=0.13.x (pgmpy 0.x) and cannot be loaded under pgmpy>=1.0. Re-learn and re-save the model with the current version, or load it using an older release: <pip install "bnlearn<0.14">' %(filepath))
+            return None
+
     # Store in self
     if model is not None:
         return model
