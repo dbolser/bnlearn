@@ -1,21 +1,10 @@
-# Add nodes that are not connected to anything (e.g. a ground-truth
-# graph for scoring a causal discovery method)
-import bnlearn as bn
-edges = [('A', 'B'), ('A', 'C')]
-DAG = bn.make_DAG(edges, isolated_nodes=['D', 'E'])
-DAG['adjmat'].columns.tolist()
-# ['A', 'B', 'C', 'D', 'E']
-bn.plot(DAG)
-
-dotgraph = bn.plot_graphviz(DAG)
-dotgraph
-
 # %%
 
 
 import numpy as np
 import pandas as pd
 from lingam.utils import make_dot
+import bnlearn as bn
 
 # Number of samples
 n = 1000
@@ -63,6 +52,23 @@ bn.plot(model)
 
 dotgraph = bn.plot_graphviz(model)
 dotgraph
+
+
+# %%
+
+
+# Add nodes that are not connected to anything (e.g. a ground-truth
+# graph for scoring a causal discovery method)
+import bnlearn as bn
+edges = [('A', 'B'), ('A', 'C')]
+DAG = bn.make_DAG(edges, isolated_nodes=['D', 'E'])
+DAG['adjmat'].columns.tolist()
+# ['A', 'B', 'C', 'D', 'E']
+bn.plot(DAG)
+
+dotgraph = bn.plot_graphviz(DAG)
+dotgraph
+
 
 
 # %%
