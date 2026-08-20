@@ -35,6 +35,9 @@ jobs:
   publish:
     name: Publish to PyPI
     needs: build
+    # Only the canonical repository publishes. Forks that cut their own
+    # GitHub release still build and check the artifacts, but skip the upload.
+    if: github.repository_owner == 'erdogant'
     runs-on: ubuntu-latest
     environment:
       name: pypi
