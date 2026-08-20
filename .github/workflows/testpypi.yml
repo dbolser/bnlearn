@@ -1,0 +1,57 @@
+name: Publish to TestPyPI
+
+# Fork-only rehearsal of release.yml. Same triggers, same build, same publish
+# action -- only the index differs. Registered on TestPyPI as a trusted
+# publisher: project=bnlearn, owner=dbolser, repo=bnlearn,
+# workflow=testpypi.yml, environment=testpypi.
+#
+# TestPyPI refuses to re-upload a version that already exists, so bump
+# __version__ to a fresh .devN before cutting each test release.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'dbolser'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Build sdist and wheel
+        run: uv build
+
+      - name: Check metadata
+        run: uvx twine check --strict dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-testpypi
+          path: dist/
+
+  publish:
+    name: Publish to TestPyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/bnlearn
+    permissions:
+      # OIDC token for TestPyPI Trusted Publishing
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-testpypi
+          path: dist/
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
