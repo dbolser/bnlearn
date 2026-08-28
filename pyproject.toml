@@ -51,6 +51,9 @@ dev = [
     "pytest-cov",
 ]
 
+[project.scripts]
+bnlearn = "bnlearn.skills:main"
+
 [project.urls]
 Homepage = "https://erdogant.github.io/bnlearn"
 Download = "https://github.com/erdogant/bnlearn/archive/{version}.tar.gz"
@@ -58,6 +61,9 @@ Download = "https://github.com/erdogant/bnlearn/archive/{version}.tar.gz"
 [tool.setuptools]
 packages = ["bnlearn"]
 include-package-data = true
+
+[tool.setuptools.package-data]
+bnlearn = ["skills/**/*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "bnlearn.__version__" }

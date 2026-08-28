@@ -137,6 +137,24 @@ uv run pytest
 pip install -e ".[dev]"
 pytest -v
 ```
+
+## Installation of bnlearn skills
+Installation of bnlearn skills for various harnesses. Default is .claude
+
+##### Install skill (default claude)
+
+```bash
+bnlearn skill install 
+```
+
+##### Install skill: harnass options {claude, opencode agents or any other name}
+
+```bash
+bnlearn skill install --harness opencode
+```
+
+
+
 ## Load library
 ```python
 # Import library
