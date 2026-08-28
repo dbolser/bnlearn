@@ -95,33 +95,56 @@ Because probabilistic graphical models can be difficult to use, ``Bnlearn`` cont
 | [Print CPTs](https://erdogant.github.io/bnlearn/pages/html/bnlearn.bnlearn.html#bnlearn.bnlearn.print_CPD) | ```bn.print_CPD()``` |
 
 ---
-### Installation
+## Installation
 
 Python 3.10 or newer is required.
 
-##### Install bnlearn from PyPI
+##### Installation: uv-pypi
 ```bash
+uv venv
+.venv\Scripts\activate
+uv pip install bnlearn
+```
+
+##### Installation: uv-local
+```bash
+uv venv
+.venv\Scripts\activate
+git clone https://github.com/erdogant/bnlearn.git
+cd bnlearn
+uv pip install -U -e .
+```
+
+##### Installation: conda-pypi
+```bash
+conda create -n env_bnlearn python=3.12
+conda activate env_bnlearn
 pip install bnlearn
 ```
-##### Install bnlearn from github source
+
+##### Installation: GitHub source
 ```bash
 pip install git+https://github.com/erdogant/bnlearn
+uv pip install git+https://github.com/erdogant/bnlearn
 ```
-##### Run the tests from a source checkout
+##### Run tests (uv)
+```bash
+uv pip install -e ".[dev]"
+uv run pytest
+```
+##### Run tests (pip)
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest -v
 ```
-With uv, use `uv sync --extra dev` followed by `uv run pytest`.
-
-##### Load library
+## Load library
 ```python
 # Import library
 import bnlearn as bn
 ```
 ---
 
-### Code Examples
+## Code Examples
 
 ```python
 
