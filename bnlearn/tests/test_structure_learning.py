@@ -1,5 +1,7 @@
 import bnlearn as bn
 import pytest
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 from pgmpy.estimators import TreeSearch
 from pgmpy.models import DiscreteBayesianNetwork

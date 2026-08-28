@@ -15,6 +15,8 @@ import numpy as np
 import pytest
 
 import bnlearn as bn
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 # Sprinkler ground truth: P(Wet_Grass=1 | Rain=1), computed exactly from the
 # hand-coded CPDs via variable elimination (deterministic; locked as a

@@ -11,6 +11,8 @@ validation, score selection, and integration with hill-climb structure learning.
 import numpy as np
 import pandas as pd
 import pytest
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 import bnlearn as bn
 from bnlearn.structure_learning import (

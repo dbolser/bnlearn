@@ -1,5 +1,7 @@
 import pandas as pd
 import bnlearn as bn
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 
 def test_example_4():

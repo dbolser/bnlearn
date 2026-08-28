@@ -2,6 +2,8 @@ import pytest
 import bnlearn as bn
 from pgmpy.factors.discrete import TabularCPD
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 
 def test_inference_sprinkler_example():

@@ -9,8 +9,8 @@ from pgmpy.factors.discrete import TabularCPD
 from pgmpy.sampling import BayesianModelSampling
 import numpy as np
 import pandas as pd
-# import matplotlib
-# matplotlib.use('Agg')  # Use non-interactive backend for tests
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 
 def test_get_parents():

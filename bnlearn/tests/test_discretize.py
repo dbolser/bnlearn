@@ -2,6 +2,8 @@ import pytest
 import pandas as pd
 from bnlearn.discretize import _bayes_net_graph, discretize_value
 import bnlearn as bn
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 def test_discritize():
     # Load data set

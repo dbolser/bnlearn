@@ -4,6 +4,8 @@ from pathlib import Path
 import pytest
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for tests
 
 from bnlearn.learn_discrete_bayes_net import (
     bn_discretizer_free_number_rep,
