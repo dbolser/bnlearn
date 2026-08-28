@@ -10,6 +10,7 @@ bnlearn/RESOURCES/
 blogs/
 .claude
 CLAUDE.md
+howto
 
 *.pkl
 .pypirc
