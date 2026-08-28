@@ -238,19 +238,26 @@ See:
 
 Structure learning determines the dependency structure of the Bayesian Network.
 
+**Exact call** (see §18 for full signature):
+
+```python
+model = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic')
+```
+
 The main approaches are:
 
 ```text
 Structure Learning
 │
-├── Score-based
+├── Score-based (methodtype='hc' | 'ex')
 │   └── Search for a graph that optimizes a score
 │
-├── Constraint-based
+├── Constraint-based (methodtype='pc' | 'cs')
 │   └── Infer structure using conditional independence tests
 │
-└── Hybrid
-    └── Combine constraint-based and score-based methods
+├── Tree / classification (methodtype='cl' | 'tan' | 'nb')
+│
+└── Causal discovery (methodtype='direct-lingam' | 'ica-lingam')
 ```
 
 ---
@@ -260,19 +267,15 @@ Structure Learning
 Use score-based learning when the goal is to find a graph that optimizes a
 statistical score.
 
-Typical approaches include:
+Typical approaches:
 
-* Hill Climbing.
-* Other search-based methods supported by bnlearn.
+* `methodtype='hc'` — Hill Climbing (default, recommended starting point)
+* `methodtype='ex'` — Exhaustive Search (only for very small networks)
 
-Typical scores include:
+Typical scores:
 
-* BIC.
-* AIC.
-* K2.
-* BDeu.
-* BDs.
-* Gaussian scores for continuous variables where supported.
+* Discrete: `bic`, `aic`, `k2`, `bdeu`, `bds`
+* Continuous (Gaussian): `bic-g`, `aic-g`, `loglik-g`
 
 See:
 
@@ -289,21 +292,25 @@ and:
 Constraint-based methods infer graph structure from conditional independence
 relationships.
 
-Typical approach:
-
-* PC algorithm.
+```python
+model = bn.structure_learning.fit(
+    df,
+    methodtype='pc',                 # or 'cs'
+    params_pc={'ci_test': 'chi_square', 'alpha': 0.05},
+)
+```
 
 Use this approach when conditional independence testing is central to the
 analysis.
 
 Consider:
 
-* Variable type.
-* Independence test.
-* Significance level.
-* Sample size.
-* Multiple testing.
-* Causal assumptions.
+* Variable type
+* Independence test (`params_pc['ci_test']`)
+* Significance level (`params_pc['alpha']`)
+* Sample size
+* Multiple testing
+* Causal assumptions
 
 See:
 
@@ -311,20 +318,16 @@ See:
 
 ---
 
-## 6.3 Hybrid Learning
+## 6.3 Tree, classification and causal methods
 
-Hybrid approaches combine constraint-based and score-based learning.
-
-A typical example is:
-
-* MMHC.
-
-Use hybrid methods when a combination of conditional independence discovery
-and score-based optimization is appropriate.
+* Tree-structured: `methodtype='cl'` / `'chow-liu'` (requires `root_node`)
+* Tree-Augmented Naive Bayes: `methodtype='tan'` (requires `root_node` + `class_node`)
+* Naive Bayes: `methodtype='nb'` / `'naivebayes'`
+* Causal discovery (continuous): `methodtype='direct-lingam'` or `'ica-lingam'`
 
 See:
 
-`references/structure_learning.md`
+`references/structure_learning.md` and `references/causal_discovery.md`
 
 ---
 
@@ -333,34 +336,40 @@ See:
 Use the following decision logic:
 
 ```text
-Is the network structure unknown?
+Is the network structure already known?
 │
-├── No
-│   └── Use the supplied structure and perform parameter learning.
+├── Yes → bn.make_DAG / bn.import_DAG → parameter_learning.fit
 │
-└── Yes
+└── No
     │
-    ├── Is conditional independence testing central?
-    │      └── Consider PC.
+    ├── Continuous data + causal discovery goal?
+    │      └── methodtype='direct-lingam' or 'ica-lingam'
     │
-    ├── Is score optimization preferred?
-    │      └── Consider Hill Climbing.
+    ├── Conditional independence testing is central?
+    │      └── methodtype='pc' (or 'cs')
     │
-    └── Is a hybrid strategy appropriate?
-           └── Consider MMHC.
+    ├── Tree / classification structure desired?
+    │      ├── methodtype='cl' / 'chow-liu'   (need root_node)
+    │      ├── methodtype='tan'              (need root_node + class_node)
+    │      └── methodtype='nb' / 'naivebayes'
+    │
+    ├── Very small number of variables (≤ ~6) and exhaustive OK?
+    │      └── methodtype='ex'
+    │
+    └── Default / general score-based search
+           └── methodtype='hc'  + appropriate scoretype
 ```
 
 Do not choose an algorithm solely because it is the default.
 
-Consider:
+Also consider:
 
-* Data type.
-* Sample size.
-* Number of variables.
-* Expected graph complexity.
-* Computational budget.
-* Causal assumptions.
-* Available domain knowledge.
+* Data type (discrete scores vs `*-g` Gaussian scores)
+* Sample size vs. number of variables
+* Expected graph complexity → use `max_indegree` or black/white lists
+* Computational budget
+* Causal assumptions
+* Available domain knowledge (`black_list`, `white_list`, `fixed_edges`)
 
 ---
 
@@ -625,45 +634,273 @@ Do not infer statistical significance merely from visual appearance.
 
 ---
 
-# 18. Canonical bnlearn Patterns
+# 18. Exact API Cheat Sheet (bnlearn ≥ 0.14)
 
-## Structure learning
+**Critical rule:** Use the exact parameter names below. Never invent aliases
+(`method=` is wrong; the correct name is `methodtype=`). Never borrow
+signatures from pgmpy, DoWhy, CausalNex, or other libraries.
+
+All signatures below were verified against the installed bnlearn API.
+
+---
+
+## 18.1 Structure learning
+
+```python
+model = bn.structure_learning.fit(
+    df,                          # pandas DataFrame (required)
+    methodtype='hc',             # see table below
+    scoretype='bic',             # see table below
+    black_list=None,             # list of edges or nodes to forbid
+    white_list=None,             # list of edges or nodes to allow
+    bw_list_method=None,         # 'edges' | 'nodes' | None
+    max_indegree=None,           # int, limit number of parents
+    tabu_length=100,             # Hill-Climbing tabu list length
+    epsilon=1e-4,
+    max_iter=1e6,
+    root_node=None,              # required for 'cl' / 'chow-liu'
+    class_node=None,             # required for 'tan'
+    fixed_edges=None,            # iterable of edges that must be present
+    start_dag=None,              # optional starting DAG
+    params_pc={'ci_test': 'chi_square', 'alpha': 0.05},
+    params_lingam={'random_state': None, 'prior_knowledge': None,
+                   'apply_prior_knowledge_softly': False, 'measure': 'pwling'},
+    n_jobs=-1,
+    verbose=3,
+)
+```
+
+### Supported `methodtype` values
+
+| methodtype        | Family              | Typical data          | Notes |
+|-------------------|---------------------|-----------------------|-------|
+| `hc`              | Score-based         | Discrete / continuous | Default. Hill Climbing |
+| `ex`              | Score-based         | Discrete (tiny nets)  | Exhaustive search |
+| `pc` / `cs`       | Constraint-based    | Discrete / continuous | PC algorithm |
+| `cl` / `chow-liu` | Tree                | Discrete              | Requires `root_node` |
+| `tan`             | Tree-Augmented NB   | Discrete              | Requires `root_node` + `class_node` |
+| `nb` / `naivebayes` | Naive Bayes       | Discrete              | Classification |
+| `direct-lingam`   | Causal (LiNGAM)     | Continuous / mixed    | Causal discovery |
+| `ica-lingam`      | Causal (LiNGAM)     | Continuous            | Causal discovery |
+
+### Supported `scoretype` values
+
+| scoretype   | Data type   | Notes |
+|-------------|-------------|-------|
+| `bic`       | Discrete    | Default, good general choice |
+| `aic`       | Discrete    | Less penalization than BIC |
+| `k2`        | Discrete    | Dirichlet prior |
+| `bdeu`      | Discrete    | BDeu score |
+| `bds`       | Discrete    | BDs score |
+| `bic-g`     | Continuous  | Gaussian BIC |
+| `aic-g`     | Continuous  | Gaussian AIC |
+| `loglik-g`  | Continuous  | Gaussian log-likelihood |
+
+**Never** pass a discrete score to continuous data (or vice-versa) without
+explicit conversion/discretization.
+
+### Return value (structure learning)
+
+Common keys (always present for score-based methods):
+
+```text
+model            # pgmpy model
+model_edges      # list of edges
+adjmat           # adjacency matrix (DataFrame)
+config           # configuration dict
+structure_scores # scores of the learned structure
+```
+
+Constraint-based (`pc` / `cs`) additionally returns:
+
+```text
+undirected, undirected_edges, pdag, pdag_edges, dag, dag_edges
+```
+
+Do not assume attributes that are not in the returned dictionary.
+
+---
+
+## 18.2 Parameter learning
+
+```python
+model = bn.parameter_learning.fit(
+    model,                 # output of structure_learning.fit or make_DAG / import_DAG
+    df,                    # same DataFrame (or compatible)
+    methodtype='bayes',    # 'bayes' | 'ml' | 'maximumlikelihood'
+    scoretype='bdeu',      # used by some estimators
+    smooth=None,
+    n_jobs=-1,
+    verbose=3,
+)
+```
+
+- `methodtype='bayes'` → Bayesian parameter estimation (recommended when counts are low).
+- `methodtype='ml'` / `'maximumlikelihood'` → Maximum-likelihood estimates.
+
+After this call the model contains CPDs and can be used for inference,
+prediction and sampling.
+
+---
+
+## 18.3 Inference
+
+```python
+
+edges = [
+    ('Cloudy', 'Sprinkler'),
+    ('Cloudy', 'Rain'),
+    ('Sprinkler', 'Wet_Grass'),
+    ('Rain', 'Wet_Grass'),
+]
+
+# Genrate Placeholder CPDs
+CPD = bn.build_cpts_from_structure(edges, variable_card=2)
+
+# Create DAG with default CPD values
+DAG = bn.make_DAG(edges, CPD=CPD)
+
+# Do the inference
+query = bn.inference.fit(DAG, variables=['Wet_Grass'], evidence={'Rain': 1, 'Sprinkler': 0, 'Cloudy': 1})
+
+```
+
+- Evidence values must be valid states of the variables.
+- When `to_df=True` the result has a `.df` attribute with columns = variables + `p`.
+- Use `bn.query2df(query, variables=[...])` to reshape.
+
+---
+
+## 18.4 Sampling
+
+```python
+df_samples = bn.sampling(
+    DAG,                       # fitted model or DAG dict
+    n=1000,
+    methodtype='bayes',        # 'bayes' | 'gibbs'
+    evidence=None,             # optional conditioning dict
+    verbose=0,
+)
+```
+
+- `methodtype='gibbs'` does **not** support `evidence`.
+- Evidence that has zero probability under the model raises `ValueError`.
+- Evidence variable names and states are validated; unknown names raise `ValueError`.
+
+---
+
+## 18.5 Prediction
+
+```python
+yhat = bn.predict(
+    model,           # fitted model
+    df,              # DataFrame with evidence columns
+    variables,       # target variable name(s) but must be in of df.columns
+    to_df=True,
+    method='max',    # 'max' (MAP) or probability
+    verbose=3,
+)
+```
+
+---
+
+## 18.6 Building / loading a DAG by hand
+
+```python
+# From edge list
+DAG = bn.make_DAG(
+    edges,                     # list of (parent, child) tuples
+    CPD=None,                  # optional list of TabularCPD
+    methodtype='bayes',        # 'bayes' | 'naivebayes' | 'DBN' | 'markov'
+    checkmodel=True,
+    verbose=3,
+)
+
+# From built-in example network
+DAG = bn.import_DAG('sprinkler')   # also: 'asia', 'alarm', ...
+df  = bn.import_example('sprinkler')
+```
+
+---
+
+## 18.7 Independence tests, discretization, one-hot
+
+```python
+# Conditional independence test on a learned model
+bn.independence_test(model, df, test='chi_square', alpha=0.05, prune=False)
+
+# Discretize continuous columns given a structure
+df_disc = bn.discretize(df, edges, ['Cloudy', 'Sprinkler'], max_iterations=8)
+
+# One-hot / numeric encoding helper
+dfhot, dfnum = bn.df2onehot(df)
+```
+
+---
+
+## 18.8 Visualization, CPD inspection, scores, I/O
+
+```python
+bn.plot(model)                    # static matplotlib plot
+bn.plot_graphviz(model)           # graphviz
+bn.print_CPD(model)               # print all CPDs
+bn.structure_scores(model, df, scoring_method=['bic', 'k2', 'bdeu', 'bds'])
+bn.save(model, filepath='bn')
+model = bn.load(filepath='bn')
+```
+
+---
+
+## 18.9 Minimal end-to-end pattern (discrete)
 
 ```python
 import bnlearn as bn
 
-model = bn.structure_learning.fit(
-    df,
-    method='hc',
-    scoretype='bic'
-)
+df = bn.import_example('sprinkler')
+
+# 1. Structure
+DAG = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic')
+
+# 2. Parameters
+model = bn.parameter_learning.fit(DAG, df, methodtype='bayes')
+
+# 3. Inference
+q = bn.inference.fit(model, variables=['Wet_Grass'],
+                     evidence={'Rain': 1, 'Sprinkler': 0})
+
+# 4. Sampling
+samples = bn.sampling(model, n=1000)
 ```
 
-## Parameter learning
-
-```python
-model = bn.parameter_learning.fit(
-    model,
-    df
-)
-```
-
-## Inference
-
-```python
-query = bn.inference.fit(
-    model,
-    variables=['target'],
-    evidence={'feature': value}
-)
-```
-
-These examples are canonical patterns only. Always verify the current API and
-available arguments before introducing less-common functionality.
+Always keep structure learning and parameter learning as two distinct steps
+unless the user already supplies a fully specified DAG with CPDs.
 
 ---
 
-# 19. Common Mistakes
+# 19. Common Mistakes (agent failure modes)
+
+These are the mistakes that appear most frequently when an agent uses bnlearn.
+
+---
+
+## Mistake: Wrong parameter name (`method` instead of `methodtype`)
+
+Incorrect:
+
+```python
+bn.structure_learning.fit(df, method='hc', scoretype='bic')
+```
+
+Correct:
+
+```python
+bn.structure_learning.fit(df, methodtype='hc', scoretype='bic')
+```
+
+The same rule applies to `parameter_learning.fit`, `make_DAG`, `sampling`, etc.
+Always use `methodtype=`.
+
+---
 
 ## Mistake: Treating every edge as causal
 
@@ -681,7 +918,8 @@ X → Y
 is evidence of a learned dependency structure.
 ```
 
-Causal interpretation requires additional assumptions.
+Causal interpretation requires additional assumptions (see §13 and
+`references/causal_discovery.md`).
 
 ---
 
@@ -690,7 +928,11 @@ Causal interpretation requires additional assumptions.
 Do not discretize continuous variables simply because discrete Bayesian
 Networks are easier to use.
 
-First consider whether a continuous/Gaussian model is appropriate.
+First consider whether a continuous/Gaussian model is appropriate
+(`scoretype='bic-g'`, `methodtype='hc'` or LiNGAM methods).
+
+Only call `bn.discretize(...)` when the user explicitly requests
+discretization or when a continuous method is demonstrably unsuitable.
 
 ---
 
@@ -719,6 +961,45 @@ variables are:
 * Continuous.
 * Mixed.
 
+Discrete scores (`bic`, `k2`, `bdeu`, …) on continuous data, or Gaussian
+scores (`bic-g`, …) on discrete data, produce incorrect or failing results.
+
+---
+
+## Mistake: Calling parameter learning before structure learning
+
+When the structure is unknown:
+
+```text
+structure_learning.fit  →  parameter_learning.fit  →  inference / sampling
+```
+
+Do not call `parameter_learning.fit` on a raw DataFrame; it expects a model
+dict that already contains a DAG.
+
+---
+
+## Mistake: Inventing function names or arguments
+
+Never invent:
+
+* `bn.learn_structure`, `bn.fit_bn`, `bn.build_network`, …
+* Arguments such as `algorithm=`, `scoring=`, `ci_test=` at the top level
+  of `structure_learning.fit` (CI-test settings belong inside `params_pc`).
+
+Stick to the functions listed in §18 and the reference files.
+
+---
+
+## Mistake: Passing invalid evidence
+
+* Variable names that do not exist in the model → `ValueError`.
+* State values outside the variable’s cardinality → `ValueError`.
+* Evidence with zero probability under the model → `ValueError` (sampling).
+* `methodtype='gibbs'` together with `evidence=` → `ValueError`.
+
+Always validate evidence against the model’s nodes and CPDs.
+
 ---
 
 ## Mistake: Ignoring sample size
@@ -726,8 +1007,8 @@ variables are:
 A network with many parameters can be poorly estimated even when structure
 learning succeeds computationally.
 
-Prefer simpler structures when the available data cannot support a highly
-complex model.
+Prefer simpler structures (`max_indegree`, stronger scores, domain constraints)
+when the available data cannot support a highly complex model.
 
 ---
 
@@ -735,14 +1016,27 @@ complex model.
 
 Structure learning is sensitive to:
 
-* Data.
-* Algorithm.
-* Score/test.
-* Hyperparameters.
-* Sampling variation.
-* Model assumptions.
+* Data
+* Algorithm (`methodtype`)
+* Score / test (`scoretype`, `params_pc`)
+* Hyperparameters
+* Sampling variation
+* Model assumptions
 
-Consider stability and uncertainty.
+Consider stability (bootstrap / resampling) and uncertainty when the user
+asks for confidence in the structure.
+
+---
+
+## Mistake: Using the wrong return-value keys
+
+After `structure_learning.fit`:
+
+* Always present: `model`, `model_edges`, `adjmat`, `config`, `structure_scores`
+* Only for `pc`/`cs`: also `undirected`, `pdag`, `dag`, …
+
+Do not write `model.edges` or `model.cpds` on the raw return dict; use
+`model['model_edges']` and, after parameter learning, `model['model'].get_cpds()`.
 
 ---
 
@@ -907,22 +1201,26 @@ Examples:
 
 ---
 
-# 25. API Accuracy
+# 25. API Accuracy (non-negotiable rules)
 
-The bnlearn API can evolve.
+The bnlearn API can evolve. When implementing a solution:
 
-When implementing a solution:
-
-1. Prefer the API exposed by the installed bnlearn version.
-2. Do not assume that APIs from other Bayesian Network libraries are interchangeable.
-3. Use only functions that exists in bnlearn. Do not invent new function names.
+1. Prefer the API exposed by the **installed** bnlearn version (currently documented for ≥ 0.14).
+2. Do **not** assume that APIs from other Bayesian Network libraries are interchangeable.
+3. Use only functions that exist in bnlearn. Do not invent new function names.
 4. Do not invent function arguments.
-5. Verify estimator, score, test, and inference arguments before using them.
-6. Prefer the current bnlearn documentation and source code over outdated examples.
-7. If an API differs between versions, explicitly state the version-specific behavior.
+5. The structure-learning keyword is **`methodtype`**, never `method`, `algorithm`, or `algo`.
+6. Verify estimator, score, test, and inference arguments before using them.
+7. Prefer the current bnlearn documentation, the unit tests under `tests/`, and the
+   reference files over outdated blog snippets or memory of other libraries.
+8. If an API differs between versions, explicitly state the version-specific behavior.
 
-Never silently substitute APIs from pgmpy, pomegranate, DoWhy, CausalNex, or
-other Bayesian Network libraries.
+**Never** silently substitute APIs from pgmpy, pomegranate, DoWhy, CausalNex,
+Lingam (standalone), or any other library. bnlearn already wraps the needed
+functionality; call the bnlearn surface.
+
+When in doubt, open the corresponding file in `references/` or the matching
+example in `examples/` before writing code.
 
 ---
 
@@ -930,18 +1228,19 @@ other Bayesian Network libraries.
 
 Before returning a bnlearn solution, verify:
 
-* [ ] The Bayesian Network task has been identified.
-* [ ] Variable types have been considered.
+* [ ] The Bayesian Network task has been identified (structure / parameters / inference / sampling / causal).
+* [ ] Variable types (discrete / continuous / mixed) have been determined.
 * [ ] Missing values have been considered.
-* [ ] Continuous variables have not been discretized unnecessarily.
-* [ ] The structure-learning algorithm is appropriate.
-* [ ] The score or independence test is appropriate.
-* [ ] Domain constraints have been considered.
-* [ ] Sample size has been considered.
-* [ ] The learned structure has been validated.
-* [ ] Parameter learning is performed when required.
-* [ ] Inference and intervention have not been confused.
-* [ ] Causal claims are supported by appropriate assumptions.
-* [ ] The bnlearn API matches the relevant version.
-* [ ] The result is reproducible where appropriate.
-* [ ] Limitations are clearly communicated.
+* [ ] Continuous variables have **not** been discretized unnecessarily.
+* [ ] `methodtype` (not `method`) is used for structure / parameter / sampling calls.
+* [ ] The chosen `methodtype` and `scoretype` are compatible with the data type.
+* [ ] Domain constraints (`black_list` / `white_list` / `max_indegree` / `fixed_edges`) have been considered when knowledge exists.
+* [ ] Sample size versus model complexity has been considered.
+* [ ] Structure learning and parameter learning are performed as **separate** steps when the DAG is unknown.
+* [ ] Return-value keys (`model`, `model_edges`, `adjmat`, …) are used correctly.
+* [ ] Evidence passed to inference / sampling uses valid variable names and states.
+* [ ] Inference and intervention (`do`) have not been confused.
+* [ ] Causal claims are supported by appropriate assumptions (or are explicitly withheld).
+* [ ] Only real bnlearn functions and arguments are used (no invented APIs).
+* [ ] The result is reproducible where appropriate (seeds, settings, versions).
+* [ ] Limitations are clearly communicated to the user.
