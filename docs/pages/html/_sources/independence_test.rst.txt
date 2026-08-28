@@ -1,6 +1,6 @@
 
-Independence test
-========================
+Independence test (guide)
+===========================
 
 The goal of the independence test is to compute the edge strength using a statistical test of independence based using the model structure (DAG) and the data. For the pairs in the DAG (either by structure learning or user-defined), an statistical test is performed. Any two variables are associated if the test’s p-value < significance_level.
 
@@ -8,7 +8,7 @@ Lets compute the DAG for **asia data set** and examine the edge strength.
 
 
 .. code-block:: python
-    
+
 	# Import library
 	import bnlearn as bn
 

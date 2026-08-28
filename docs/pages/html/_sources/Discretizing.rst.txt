@@ -254,8 +254,8 @@ We can now discretize the continuous columns as follows:
 
 At this point, the dataset is no different from any other discrete dataset. We can specify the DAG together with the discrete dataframe and fit a model using ``bnlearn``.
 
-Structure Learning
-*******************
+Structure Learning (discretized data)
+**************************************
 
 We will learn the structure on the discretized continuous data. Note that the data is also discretized on a set of edges, which may introduce a bias in the learned structure.
 
@@ -290,8 +290,8 @@ We will learn the structure on the discretized continuous data. Note that the da
 
    <iframe src="https://erdogant.github.io/docs/d3blocks/bnlearn_continous_example_1.html" height="700px" width="750px", frameBorder="0"></iframe>
 
-Parameter Learning
-******************
+Parameter Learning (discretized data)
+*************************************
 
 Let's continue with parameter learning on the continuous dataset and see whether we can estimate the CPDs.
 

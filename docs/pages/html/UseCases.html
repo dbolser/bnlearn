@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Create%20DAG.html">Directed Acyclic Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="impute.html">Impute</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Example%20Datasets.html">DataFrames</a></li>
@@ -129,7 +129,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Titanic Dataset Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#medical-domain-analysis">Medical Domain Analysis</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-case-description">Use case description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#importing-data">Importing Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#making-inferences-with-data-and-expert-knowledge">Making Inferences with Data and Expert Knowledge</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#creating-a-custom-directed-acyclic-graph">Creating a Custom Directed Acyclic Graph</a></li>
@@ -160,7 +160,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -195,21 +195,21 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Load example mixed dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;titanic&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'titanic'</span><span class="p">)</span>
 
 <span class="c1"># Convert to one-hot encoding</span>
 <span class="n">dfhot</span><span class="p">,</span> <span class="n">dfnum</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">df2onehot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 
 <span class="c1"># Structure learning</span>
-<span class="c1"># model = bn.structure_learning.fit(dfnum, methodtype=&#39;cl&#39;, black_list=[&#39;Embarked&#39;,&#39;Parch&#39;,&#39;Name&#39;], root_node=&#39;Survived&#39;, bw_list_method=&#39;nodes&#39;)</span>
+<span class="c1"># model = bn.structure_learning.fit(dfnum, methodtype='cl', black_list=['Embarked','Parch','Name'], root_node='Survived', bw_list_method='nodes')</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dfnum</span><span class="p">)</span>
 <span class="c1"># Plot</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="c1"># Compute edge strength with chi-square test statistic</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dfnum</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;chi_square&#39;</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dfnum</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">'chi_square'</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># Plot with edge labels</span>
-<span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">],</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">'pos'</span><span class="p">],</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
 
 <span class="c1"># Parameter learning</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">dfnum</span><span class="p">)</span>
@@ -226,7 +226,7 @@
 </table>
 <p>Making Inferences:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make inference with evidence</span>
-<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Sex&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Pclass&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">})</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'Survived'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'Sex'</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">'Pclass'</span><span class="p">:</span><span class="kc">True</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 
 <span class="c1"># +----+------------+----------+</span>
@@ -243,7 +243,7 @@
 <span class="c1">#  1        0.444573</span>
 
 <span class="c1"># Another inference using only sex as evidence</span>
-<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Sex&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'Survived'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'Sex'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
 <span class="c1"># +----+------------+----------+</span>
 <span class="c1"># |    |   Survived |        p |</span>
@@ -260,9 +260,9 @@
 
 <span class="c1"># All CPDs are stored in the dict CPD which contains the CPD for each node</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">CPDs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="c1"># dict_keys([&#39;Pclass&#39;, &#39;Survived&#39;, &#39;Embarked&#39;, &#39;Sex&#39;, &#39;SibSp&#39;, &#39;Parch&#39;])</span>
+<span class="c1"># dict_keys(['Pclass', 'Survived', 'Embarked', 'Sex', 'SibSp', 'Parch'])</span>
 
-<span class="n">CPDs</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
+<span class="n">CPDs</span><span class="p">[</span><span class="s1">'Survived'</span><span class="p">]</span>
 <span class="c1">#     Survived  Pclass  Sex         p</span>
 <span class="c1"># 0          0       0    0  0.331202</span>
 <span class="c1"># 1          0       0    1  0.555427</span>
@@ -282,8 +282,8 @@
 <section id="medical-domain-analysis">
 <h1>Medical Domain Analysis<a class="headerlink" href="#medical-domain-analysis" title="Link to this heading"></a></h1>
 <p>This section describes a use case for analyzing patient treatment regarding shortness-of-breath (dyspnea). The example demonstrates how to incorporate expert knowledge into a Bayesian model. The dataset is synthetic and based on Lauritzen and Spiegelhalter (1988), focusing on lung diseases (tuberculosis, lung cancer, or bronchitis) and visits to Asia.</p>
-<section id="description">
-<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<section id="use-case-description">
+<h2>Use case description<a class="headerlink" href="#use-case-description" title="Link to this heading"></a></h2>
 <dl class="simple">
 <dt>Motivation:</dt><dd><p>“<em>Shortness-of-breath (dyspnea) may be due to tuberculosis, lung cancer or bronchitis, or none of them, or more than one of them. A recent visit to Asia increases the chances of tuberculosis, while smoking is known to be a risk factor for both lung cancer and bronchitis. The results of a single chest X-ray do not discriminate between lung cancer and tuberculosis, as neither does the presence or absence of dyspnea.</em>”</p>
 </dd>
@@ -293,10 +293,10 @@
 </section>
 <section id="importing-data">
 <h2>Importing Data<a class="headerlink" href="#importing-data" title="Link to this heading"></a></h2>
-<p>The first step is to import the dataset. For unstructured data, use the <code class="docutils literal notranslate"><span class="pre">df2onehot</span></code> functionality <a class="reference internal" href="bnlearn.bnlearn.html#bnlearn.bnlearn.df2onehot" title="bnlearn.bnlearn.df2onehot"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.df2onehot()</span></code></a>. The <strong>Examples</strong> section contains examples of importing raw data followed by basic structuring approaches (section: <a class="reference internal" href="Examples.html#working-with-raw-data"><span class="std std-ref">Working with Raw Data</span></a>). In this case, we’ll load a structured dataset from <code class="docutils literal notranslate"><span class="pre">bnlearn</span></code>.</p>
+<p>The first step is to import the dataset. For unstructured data, use the <code class="docutils literal notranslate"><span class="pre">df2onehot</span></code> functionality <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.df2onehot()</span></code>. The <strong>Examples</strong> section contains examples of importing raw data followed by basic structuring approaches (section: <a class="reference internal" href="Examples.html#working-with-raw-data"><span class="std std-ref">Working with Raw Data</span></a>). In this case, we’ll load a structured dataset from <code class="docutils literal notranslate"><span class="pre">bnlearn</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load dataset with 10,000 samples</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">&#39;asia&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">'asia'</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 <span class="c1"># Print to screen</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -386,10 +386,10 @@
 - Smoking is related to bronchitis
 - Lung conditions or bronchitis may require an X-ray examination</p>
 <p>This is a simple DAG for demonstration purposes. Note that the direction is crucial - the first column is the source (“from”) and the second column is the destination (“to”).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;smoke&#39;</span><span class="p">,</span> <span class="s1">&#39;lung&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;smoke&#39;</span><span class="p">,</span> <span class="s1">&#39;bronc&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;lung&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">)]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'smoke'</span><span class="p">,</span> <span class="s1">'lung'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'smoke'</span><span class="p">,</span> <span class="s1">'bronc'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'lung'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'bronc'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>Plot the Bayesian DAG:</p>
@@ -413,10 +413,10 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check current CPDs in the DAG</span>
 <span class="n">CPDs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
 <span class="c1"># [bnlearn] &gt;No CPDs to print. Tip: use bn.plot(DAG) to make a plot.</span>
-<span class="c1"># This is correct, as we haven&#39;t specified any CPDs yet</span>
+<span class="c1"># This is correct, as we haven't specified any CPDs yet</span>
 
 <span class="c1"># Learn parameters from the dataset</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;bayes&#39;</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'bayes'</span><span class="p">)</span>
 
 <span class="c1"># Print the CPDs</span>
 <span class="n">CPDs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
@@ -508,7 +508,7 @@
 <p><strong>Question 1</strong></p>
 <p>What is the probability of lung-cancer, given that we know that patient does smoke?
 The model returns that the probability of lung-cancer or lung(1) is 0.94 when the patient does smoke; P(lung=1 | smoke=1)=0.94.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q1</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lung&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q1</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'lung'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">q1</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
 
 <span class="c1"># Finding Elimination Order: : 100% 2/2 [00:00&lt;00:00, 401.14it/s]</span>
@@ -534,7 +534,7 @@ The model returns that the probability of lung-cancer or lung(1) is 0.94 when th
 <p><strong>Question 2</strong></p>
 <p>What is the probability of bronchitis, given that we know that patient does smoke?
 The model returns that the probability of bronchitis or bronc(1) is 0.68 when the patient does smoke; P(bronc=1 | smoke=1)=0.68.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q2</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q2</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 
 <span class="c1"># Finding Elimination Order: : 100% 2/2 [00:00&lt;00:00, 286.31it/s]</span>
 <span class="c1"># Eliminating: lung: 100% 2/2 [00:00&lt;00:00, 143.26it/s]</span>
@@ -558,7 +558,7 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 </table>
 <p><strong>Question 3</strong></p>
 <p>Lets add more information to our inference. What is the probability of lung-cancer, given that we know that patient does smoke and also has bronchitis?</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q3</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lung&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bronc&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q3</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'lung'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'bronc'</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span>
 
 <span class="c1"># Finding Elimination Order: : 100%  1/1 [00:00&lt;00:00, 334.31it/s]</span>
 <span class="c1"># Eliminating: xray: 100%  1/1 [00:00&lt;00:00, 338.47it/s]</span>
@@ -582,7 +582,7 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 </table>
 <p><strong>Question 4</strong></p>
 <p>Lets specify the question even more. What is the probability of lung-cancer or bronchitis, given that we know that patient does smoke but did not had xray?</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q4</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span><span class="s1">&#39;lung&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q4</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span><span class="s1">'lung'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -669,7 +669,7 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 </dl>
 <p>The first step is to import and pre-process the data set as depicted in <a class="reference internal" href="#importing-data"><span class="std std-ref">Importing Data</span></a>. Then we compute the DAG by means of structure learning as depicted in <a class="reference internal" href="#compute-directed-acyclic-graph-from-data"><span class="std std-ref">Compute Directed Acyclic Graph from data</span></a>. To make inferences, we first need to compute the CPDs which we can do with <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.parameter_learning.fit()</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Learning the CPDs using parameter learning</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;bayes&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'bayes'</span><span class="p">)</span>
 <span class="c1"># Print the CPDs</span>
 <span class="n">CPDs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 </pre></div>
@@ -808,7 +808,7 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 <p>From this point on we can start making inferences given the DAG and the CPDs. For demonstration purposes I will repeat question 4.</p>
 <p><strong>Question</strong></p>
 <p>What is the probability of lung-cancer or bronchitis, given that we know that patient does smoke but did <strong>not</strong> had xray?</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span><span class="s1">&#39;lung&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span><span class="s1">'lung'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">:</span><span class="mi">0</span><span class="p">})</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -850,11 +850,11 @@ In the following example we will load the auto mpg dataset and learn the structu
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Load data set</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;auto_mpg&#39;</span><span class="p">)</span>
-<span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'auto_mpg'</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">'origin'</span><span class="p">]</span>
 
 <span class="c1"># Structure learning</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;direct-lingam&#39;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'direct-lingam'</span><span class="p">)</span>
 
 <span class="c1"># Compute edge strength</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -865,7 +865,7 @@ In the following example we will load the auto mpg dataset and learn the structu
 <span class="c1"># Plot with graphviz</span>
 <span class="n">dotgraph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 <span class="n">dotgraph</span>
-<span class="n">dotgraph</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;dotgraph_auto_mpg_lingam_direct&#39;</span><span class="p">)</span>
+<span class="n">dotgraph</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">'dotgraph_auto_mpg_lingam_direct'</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils align-center">

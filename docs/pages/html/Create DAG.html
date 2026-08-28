@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Impute" href="impute.html" />
-    <link rel="prev" title="Independence test" href="independence_test.html" /> 
+    <link rel="prev" title="Independence test (guide)" href="independence_test.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Directed Acyclic Graphs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#build-a-dag-auto-generated-cpts">Build a DAG (Auto generated CPTs)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-a-dag-manual-cpts">Build a DAG (Manual CPTs)</a></li>
@@ -149,7 +149,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -204,13 +204,13 @@ First, we define the directed relationships between the variables by specifying 
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Define the network structure</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">)]</span>
 
 <span class="c1"># Make the Bayesian DAG. The CPTs are auto-generated.</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;bayes&#39;</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'bayes'</span><span class="p">)</span>
 
 <span class="c1"># Plot the DAG</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
@@ -237,10 +237,10 @@ Alternatively, you can generate them using <code class="docutils literal notrans
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Define the network structure</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">)]</span>
 
 <span class="c1"># Generate Placeholder CPTs</span>
 <span class="n">CPD</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">build_cpts_from_structure</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -255,7 +255,7 @@ Alternatively, you can generate them using <code class="docutils literal notrans
 <span class="n">d</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Make inferences</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Rain&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Cloudy&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'Wet_Grass'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'Rain'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'Cloudy'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 
 
 <span class="p">[</span><span class="n">bnlearn</span><span class="p">]</span> <span class="o">&gt;</span><span class="n">Variable</span> <span class="n">Elimination</span><span class="o">.</span>
@@ -269,7 +269,7 @@ Alternatively, you can generate them using <code class="docutils literal notrans
 <span class="o">|</span>  <span class="mi">2</span> <span class="o">|</span>           <span class="mi">2</span> <span class="o">|</span> <span class="mf">0.333333</span> <span class="o">|</span>
 <span class="o">+----+-------------+----------+</span>
 
-<span class="n">Summary</span> <span class="k">for</span> <span class="n">variables</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">]</span>
+<span class="n">Summary</span> <span class="k">for</span> <span class="n">variables</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Wet_Grass'</span><span class="p">]</span>
 <span class="n">Given</span> <span class="n">evidence</span><span class="p">:</span> <span class="n">Rain</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Cloudy</span><span class="o">=</span><span class="mi">1</span>
 
 <span class="n">Wet_Grass</span> <span class="n">outcomes</span><span class="p">:</span>
@@ -284,25 +284,25 @@ Note that if you change the <cite>variable_card</cite>, it must also match with 
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Define the network structure</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">)]</span>
 
 <span class="c1"># Get parent nodes from the edges</span>
 <span class="n">parents</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">get_parents</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span>
-<span class="p">{</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">],</span>
- <span class="s1">&#39;Rain&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">],</span>
- <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">],</span>
- <span class="s1">&#39;Cloudy&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="p">{</span><span class="s1">'Sprinkler'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Cloudy'</span><span class="p">],</span>
+ <span class="s1">'Rain'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Cloudy'</span><span class="p">],</span>
+ <span class="s1">'Wet_Grass'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">],</span>
+ <span class="s1">'Cloudy'</span><span class="p">:</span> <span class="p">[]}</span>
 
 <span class="c1"># Create the CPT for each node. When changing the variable_card, it should match the cardinality!</span>
-<span class="n">cpt_cloudy</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">cpt_sprinkler</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">cpt_rain</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">cpt_wetgrass</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cpt_cloudy</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cpt_sprinkler</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cpt_rain</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'Rain'</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cpt_wetgrass</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">generate_cpt</span><span class="p">(</span><span class="s1">'Wet_Grass'</span><span class="p">,</span> <span class="n">parents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'Wet_Grass'</span><span class="p">),</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># Create the DAG with custom CPTs. The order of the CPTs does not matter.</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="p">[</span><span class="n">cpt_sprinkler</span><span class="p">,</span> <span class="n">cpt_rain</span><span class="p">,</span> <span class="n">cpt_wetgrass</span><span class="p">,</span> <span class="n">cpt_cloudy</span><span class="p">])</span>
@@ -311,7 +311,7 @@ Note that if you change the <cite>variable_card</cite>, it must also match with 
 <span class="n">d</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Make inferences</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Rain&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Cloudy&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'Wet_Grass'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'Rain'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'Cloudy'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 </pre></div>
 </div>
 </section>
@@ -327,35 +327,35 @@ Despite this distinction, the term CPD is still more commonly used than CMK.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Define the network structure</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="s1">&#39;Wet_Grass&#39;</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="s1">'Wet_Grass'</span><span class="p">)]</span>
 
 <span class="c1"># Import the library</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pgmpy.factors.discrete</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularCPD</span>
 
 <span class="c1"># Cloudy has no parents</span>
-<span class="n">cpt_cloudy</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="n">cpt_cloudy</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">'Cloudy'</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
                         <span class="n">values</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">]])</span>
 
 <span class="c1"># Sprinkler | Cloudy (Cloudy has 3 values)</span>
-<span class="n">cpt_sprinkler</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">cpt_sprinkler</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                            <span class="n">values</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>  <span class="c1"># Sprinkler=0</span>
                                    <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]],</span> <span class="c1"># Sprinkler=1</span>
-                           <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                           <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">'Cloudy'</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="c1"># Rain | Cloudy (Cloudy has 3 values)</span>
-<span class="n">cpt_rain</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">cpt_rain</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">'Rain'</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                       <span class="n">values</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>  <span class="c1"># Rain=0</span>
                               <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]],</span> <span class="c1"># Rain=1</span>
-                      <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                      <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">'Cloudy'</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 
 <span class="c1"># Wet_Grass | Sprinkler, Rain (both binary)</span>
-<span class="n">cpt_wetgrass</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="n">cpt_wetgrass</span> <span class="o">=</span> <span class="n">TabularCPD</span><span class="p">(</span><span class="n">variable</span><span class="o">=</span><span class="s1">'Wet_Grass'</span><span class="p">,</span> <span class="n">variable_card</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                           <span class="n">values</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">],</span>  <span class="c1"># Wet_Grass=0</span>
                                   <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">]],</span> <span class="c1"># Wet_Grass=1</span>
-                          <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span> <span class="s1">&#39;Rain&#39;</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+                          <span class="n">evidence</span><span class="o">=</span><span class="p">[</span><span class="s1">'Sprinkler'</span><span class="p">,</span> <span class="s1">'Rain'</span><span class="p">],</span> <span class="n">evidence_card</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">cpt_sprinkler</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">cpt_rain</span><span class="p">)</span>
@@ -374,7 +374,7 @@ Despite this distinction, the term CPD is still more commonly used than CMK.</p>
 <span class="n">d</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Make inferences</span>
-<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Rain&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Sprinkler&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Cloudy&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'Wet_Grass'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'Rain'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'Sprinkler'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'Cloudy'</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
 </pre></div>
 </div>
 <hr>
@@ -391,7 +391,7 @@ Despite this distinction, the term CPD is still more commonly used than CMK.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="independence_test.html" class="btn btn-neutral float-left" title="Independence test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="independence_test.html" class="btn btn-neutral float-left" title="Independence test (guide)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="impute.html" class="btn btn-neutral float-right" title="Impute" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

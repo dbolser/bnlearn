@@ -100,8 +100,8 @@ Medical Domain Analysis
 
 This section describes a use case for analyzing patient treatment regarding shortness-of-breath (dyspnea). The example demonstrates how to incorporate expert knowledge into a Bayesian model. The dataset is synthetic and based on Lauritzen and Spiegelhalter (1988), focusing on lung diseases (tuberculosis, lung cancer, or bronchitis) and visits to Asia.
 
-Description
------------
+Use case description
+----------------------
 
 Motivation:
     "*Shortness-of-breath (dyspnea) may be due to tuberculosis, lung cancer or bronchitis, or none of them, or more than one of them. A recent visit to Asia increases the chances of tuberculosis, while smoking is known to be a risk factor for both lung cancer and bronchitis. The results of a single chest X-ray do not discriminate between lung cancer and tuberculosis, as neither does the presence or absence of dyspnea.*"
@@ -167,7 +167,7 @@ This is a simple DAG for demonstration purposes. Note that the direction is cruc
 Plot the Bayesian DAG:
 
 .. code-block:: python
-    
+
     # Create the DAG from the edges
     DAG = bn.make_DAG(edges)
 
@@ -260,7 +260,7 @@ What is the probability of lung-cancer, given that we know that patient does smo
 The model returns that the probability of lung-cancer or lung(1) is 0.94 when the patient does smoke; P(lung=1 | smoke=1)=0.94.
 
 .. code-block:: python
-    
+
     q1 = bn.inference.fit(DAG, variables=['lung'], evidence={'smoke':1})
     print(q1.df)
 
@@ -284,7 +284,7 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 
 
 .. code-block:: python
-    
+
     q2 = bn.inference.fit(DAG, variables=['bronc'], evidence={'smoke':1})
 
     # Finding Elimination Order: : 100% 2/2 [00:00<00:00, 286.31it/s]
@@ -302,10 +302,10 @@ The model returns that the probability of bronchitis or bronc(1) is 0.68 when th
 
 **Question 3**
 
-Lets add more information to our inference. What is the probability of lung-cancer, given that we know that patient does smoke and also has bronchitis? 
+Lets add more information to our inference. What is the probability of lung-cancer, given that we know that patient does smoke and also has bronchitis?
 
 .. code-block:: python
-    
+
     q3 = bn.inference.fit(DAG, variables=['lung'], evidence={'smoke':1, 'bronc':1})
 
     # Finding Elimination Order: : 100%  1/1 [00:00<00:00, 334.31it/s]
@@ -324,10 +324,10 @@ Lets add more information to our inference. What is the probability of lung-canc
 
 **Question 4**
 
-Lets specify the question even more. What is the probability of lung-cancer or bronchitis, given that we know that patient does smoke but did not had xray? 
+Lets specify the question even more. What is the probability of lung-cancer or bronchitis, given that we know that patient does smoke but did not had xray?
 
 .. code-block:: python
-    
+
     q4 = bn.inference.fit(DAG, variables=['bronc','lung'], evidence={'smoke':1, 'xray':0})
 
 +---------+----------+-------------------+
@@ -362,7 +362,7 @@ Compute Directed Acyclic Graph from data
 Import and process teh data set (:ref:`Importing Data`). For this use-case we will compute the best performing DAG given the data set. You only need to provide the data set into ``bnlearn`` :func:`bnlearn.bnlearn.structure_learning.fit`. More about Directed Acyclic Graphs can be found in the section :ref:`Directed Acyclic Graphs`.
 
 .. code-block:: python
-    
+
     # Structure learning on the data set
     model = bn.structure_learning.fit(df)
     # [bnlearn] >Computing best DAG using [hc]
@@ -371,14 +371,14 @@ Import and process teh data set (:ref:`Importing Data`). For this use-case we wi
     # Compute significance
     model = bn.independence_test(model, df, prune=True)
     # [bnlearn] >Edge [lung <-> tub] [P=0.540506] is excluded because it was not significant (P<0.05) with [chi_square]
-    
+
 
 The computations can take seconds to days or even never-ending, depending on the complexity of your data set and the method in ``bnlearn`` you choose. This use-case contains only 8 variables, each with two states and will be computed within seconds. If your data set is huge, and readily have suspicion you can use the black_list or white_list parameters (:ref:`Black and white lists`).
 
 Lets plot the learned DAG and examine the structure!
 
 .. code-block:: python
-    
+
     # Plot the DAG
     bn.plot(model, interactive=False)
     bn.plot(model, interactive=True)
@@ -412,7 +412,7 @@ Steps to take
 The first step is to import and pre-process the data set as depicted in :ref:`Importing Data`. Then we compute the DAG by means of structure learning as depicted in :ref:`Compute Directed Acyclic Graph from data`. To make inferences, we first need to compute the CPDs which we can do with :func:`bnlearn.bnlearn.parameter_learning.fit`.
 
 .. code-block:: python
-    
+
     # Learning the CPDs using parameter learning
     model = bn.parameter_learning.fit(model, df, methodtype='bayes')
     # Print the CPDs
@@ -496,7 +496,7 @@ From this point on we can start making inferences given the DAG and the CPDs. Fo
 What is the probability of lung-cancer or bronchitis, given that we know that patient does smoke but did **not** had xray?
 
 .. code-block:: python
-    
+
     q = bn.inference.fit(DAG, variables=['bronc','lung'], evidence={'smoke':1, 'xray':0})
 
 +---------+----------+-------------------+
@@ -511,7 +511,7 @@ What is the probability of lung-cancer or bronchitis, given that we know that pa
 | lung(1) | bronc(1) |            0.5113 |
 +---------+----------+-------------------+
 
-The highest probability for the patient under these condition is that lung-cancer is true and bronchitus is true too (P=0.51). 
+The highest probability for the patient under these condition is that lung-cancer is true and bronchitus is true too (P=0.51).
 
 Use Case Continuous Datasets
 =============================
@@ -524,7 +524,7 @@ In the following example we will load the auto mpg dataset and learn the structu
 
     # Import
     import bnlearn as bn
-    
+
     # Load data set
     df = bn.import_example(data='auto_mpg')
     del df['origin']

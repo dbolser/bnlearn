@@ -35,7 +35,7 @@ import pypickle
 import bnlearn as bn
 from bnlearn.sampling import sampling as bn_sampling
 from bnlearn.CITests import chi_square, g_sq, log_likelihood, freeman_tuckey, modified_log_likelihood, neyman, cressie_read
-        
+
 
 # %%  Convert adjmat to bayesian model
 def to_bayesiannetwork(model, verbose=3):
@@ -461,8 +461,8 @@ def dag2adjmat(model, verbose=3):
 def vec2df(source, target, weights=None):
     """Convert source-target edges into sparse dataframe.
 
-    Description
-    -----------
+    vec2df overview
+    ----------------
     Convert edges between source and taget into a dataframe based on the weight.
     A weight of 2 will result that a row with the edge is created 2x.
 
@@ -1094,12 +1094,12 @@ def plot_graphviz(model,
         A dictionary of parameters to control the visualization. Default values are provided,
         but users can modify specific parameters. The available options are:
 
-        - `prediction_feature_indices` (list or None): The feature indices to be used in the 
+        - `prediction_feature_indices` (list or None): The feature indices to be used in the
           prediction path, or `None` for no specific feature highlights.
         - `prediction_target_label` (str): Label for the prediction target node.
         - `prediction_line_color` (str): Color for the prediction path in the graph.
         - `prediction_coefs` (list or None): Coefficients for the prediction line (optional).
-        - `prediction_feature_importance` (list or None): Feature importance values for features 
+        - `prediction_feature_importance` (list or None): Feature importance values for features
           in the prediction path.
         - `path` (list or None): Specific path between nodes to highlight, or `None` to ignore.
         - `path_color` (str or None): Color of the path to highlight, or `None`.
@@ -1116,7 +1116,7 @@ def plot_graphviz(model,
     Returns
     -------
     dot_graph : graphviz.Source or None
-        A Graphviz `Source` object containing the DOT source code for the graph. This can be 
+        A Graphviz `Source` object containing the DOT source code for the graph. This can be
         rendered or exported. Returns `None` if no edges are found in the adjacency matrix.
 
     Notes
@@ -1492,7 +1492,7 @@ def _plot_interactive(params_interactive, nodelist, node_colors, node_sizes, edg
 
     # Change node properties
     _, IB = ismember([*d3.D3graph.node_properties.keys()], nodelist)
-    
+
     d3.D3graph.set_node_properties(tooltip=np.array(tooltip)[IB],
                                    size=np.array(node_sizes)[IB],
                                    color=np.array(node_colors)[IB],
@@ -1551,8 +1551,8 @@ def _plot_properties(G, node_properties, edge_properties, node_color, node_size)
 def topological_sort(adjmat, start=None):
     """Topological sort.
 
-    Description
-    -----------
+    Topological sort overview
+    -------------------------
     Get nodes list in the topological sort order.
 
     Parameters
@@ -1779,8 +1779,8 @@ def _filter_df(adjmat, df, verbose=3):
 def predict(model, df, variables, to_df=True, method='max', verbose=3):
     """Predict on data from a Bayesian network.
 
-    Description
-    -----------
+    Predict overview
+    ----------------
     The inference on the dataset is performed sample-wise by using all the available nodes as evidence (obviously, with the exception of the node whose values we are predicting).
     The states with highest probability are returned.
 

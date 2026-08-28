@@ -4,6 +4,7 @@ Structure Scores
 .. automodule:: bnlearn.bnlearn.structure_scores
     :members:
     :undoc-members:
+    :noindex:
 
 
 

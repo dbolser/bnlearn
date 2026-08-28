@@ -1,7 +1,7 @@
 """Parameter learning.
 
-Description
------------
+Overview
+----------
 Parameter learning is the task to estimate the values of the conditional probability distributions (CPDs).
 To make sense of the given data, we can start by counting how often each state of the variable occurs.
 If the variable is dependent on the parents, the counts are done conditionally on the parents states,
@@ -31,23 +31,23 @@ warnings.filterwarnings("ignore")
 def fit(model, df, methodtype='bayes', scoretype='bdeu', smooth=None, n_jobs=-1, verbose=3):
     """Learn the parameters given the DAG and data.
 
-    Description
-    -----------
+    Fit overview
+    -------------
     Maximum Likelihood Estimation
-        A natural estimate for the CPDs is to simply use the *relative frequencies*,
-        with which the variable states have occured. We observed x cloudy` among a total of `all clouds`,
-        so we might guess that about `50%` of `cloudy` are `sprinkler or so.
-        According to MLE, we should fill the CPDs in such a way, that P(data|model) is maximal.
-        This is achieved when using the relative frequencies.
+        A natural estimate for the CPDs is to simply use the *relative frequencies*
+        with which the variable states have occurred. For example, if we observed 50
+        occurrences of state 'cloudy' among 100 samples, we might estimate a 50%
+        probability for that state. According to MLE, we should fill the CPDs to
+        maximize P(data | model), which is achieved by using relative frequencies.
 
         While very straightforward, the ML estimator has the problem of *overfitting* to the data.
-        If the observed data is not representative for the underlying distribution, ML estimations will be extremly far off.
+        If the observed data is not representative of the underlying distribution, ML estimations can be far off.
         When estimating parameters for Bayesian networks, lack of data is a frequent problem.
         Even if the total sample size is very large, the fact that state counts are done conditionally
-        for each parents configuration causes immense fragmentation.
+        for each parent configuration causes fragmentation.
         If a variable has 3 parents that can each take 10 states, then state counts will
-        be done seperately for `10^3 = 1000` parents configurations.
-        This makes MLE very fragile and unstable for learning Bayesian Network parameters.
+        be done separately for `10^3 = 1000` parent configurations.
+        This makes MLE fragile and unstable for learning Bayesian Network parameters.
         A way to mitigate MLE's overfitting is *Bayesian Parameter Estimation*.
 
     Bayesian Parameter Estimation

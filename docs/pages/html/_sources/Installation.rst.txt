@@ -16,6 +16,27 @@ To force install the latest version, use the -U (update) argument:
 
     pip install -U bnlearn
 
+Install with uv
+---------------
+
+If you use the `uv` helper for creating and managing virtual environments, you can install bnlearn using the following commands.
+
+.. code-block:: console
+
+    uv venv
+    .venv\Scripts\activate
+    uv pip install bnlearn
+
+To install the package from the local source tree (editable install):
+
+.. code-block:: console
+
+    uv venv
+    .venv\Scripts\activate
+    git clone https://github.com/erdogant/bnlearn.git
+    cd bnlearn
+    uv pip install -U -e .
+
 Install from GitHub
 -------------------
 

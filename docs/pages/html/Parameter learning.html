@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -115,7 +115,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Create%20DAG.html">Directed Acyclic Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="impute.html">Impute</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Example%20Datasets.html">DataFrames</a></li>
@@ -153,7 +153,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -260,7 +260,7 @@
 </tbody>
 </table>
 <p>Next, we import the DAG structure:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DAG</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;sprinkler&#39;</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DAG</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'sprinkler'</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -310,7 +310,7 @@
 <p><span class="caption-text">DAG of the Sprinkler dataset.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>Suppose we observed <strong>N</strong> “cloudy” occurrences among a total of “all clouds”, so we might guess that about “50%” of “cloudy” are “sprinkler” or so. According to MLE, we should fill the CPDs in such a way, that P(data|model) is maximal. This is achieved when using the <em>relative frequencies</em>. From the <em>bnlearn</em> library, we’ll need the <a class="reference internal" href="bnlearn.parameter_learning.html#bnlearn.parameter_learning.fit" title="bnlearn.parameter_learning.fit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fit</span></code></a> for this exercise:</p>
+<p>Suppose we observed <strong>N</strong> “cloudy” occurrences among a total of “all clouds”, so we might guess that about “50%” of “cloudy” are “sprinkler” or so. According to MLE, we should fill the CPDs in such a way, that P(data|model) is maximal. This is achieved when using the <em>relative frequencies</em>. From the <em>bnlearn</em> library, we’ll need the <code class="xref py py-class docutils literal notranslate"><span class="pre">fit</span></code> for this exercise:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DAG_update</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -400,7 +400,7 @@
 </dd>
 </dl>
 <p>Great! We have the probabilities! Let’s check how much they differ from the truth. In general it can be seen that the estimated values are not very close at every point to the true values. The main reason is because the dataframe only contains 1000 samples.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DAG_true</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;sprinkler&#39;</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DAG_true</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'sprinkler'</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>True CPDs:</p>
@@ -493,7 +493,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span>
 
 <span class="c1"># Load asia dataset</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'asia'</span><span class="p">)</span>
 <span class="c1"># Plot</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">bnlearn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
 </pre></div>
@@ -671,17 +671,17 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Import one of the example models</span>
-<span class="c1"># sprinkler&#39;, &#39;alarm&#39;, &#39;andes&#39;, &#39;asia&#39;, &#39;sachs&#39;, &#39;filepath/to/model.bif&#39;,</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;asia&#39;</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># sprinkler', 'alarm', 'andes', 'asia', 'sachs', 'filepath/to/model.bif',</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'asia'</span><span class="p">,</span> <span class="n">CPD</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Print the CPD for the model</span>
 <span class="n">CPDs</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">print_CPD</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Deeper investigate the CPDs</span>
 <span class="n">CPDs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="c1"># dict_keys([&#39;asia&#39;, &#39;bronc&#39;, &#39;dysp&#39;, &#39;either&#39;, &#39;lung&#39;, &#39;smoke&#39;, &#39;tub&#39;, &#39;xray&#39;])</span>
+<span class="c1"># dict_keys(['asia', 'bronc', 'dysp', 'either', 'lung', 'smoke', 'tub', 'xray'])</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">CPDs</span><span class="p">[</span><span class="s1">&#39;smoke&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">CPDs</span><span class="p">[</span><span class="s1">'smoke'</span><span class="p">])</span>
 <span class="c1">#    smoke    p</span>
 <span class="c1"># 0      0  0.5</span>
 <span class="c1"># 1      1  0.5</span>

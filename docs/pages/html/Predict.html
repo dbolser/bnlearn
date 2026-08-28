@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Create%20DAG.html">Directed Acyclic Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="impute.html">Impute</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Example%20Datasets.html">DataFrames</a></li>
@@ -145,7 +145,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -185,7 +185,7 @@ The states with highest probability are then returned.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Load example DataFrame</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">'asia'</span><span class="p">)</span>
 
 <span class="c1"># The dataframe consists four boolean variables</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -203,10 +203,10 @@ The states with highest probability are then returned.</p>
 <span class="c1"># 9999      0     1      1     0</span>
 
 <span class="c1"># Lets create a DAG by defining some edges between the variables. In this example smoke is related to lung, smoke to bronc, lung to xray and bronc to xray.</span>
-<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;smoke&#39;</span><span class="p">,</span> <span class="s1">&#39;lung&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;smoke&#39;</span><span class="p">,</span> <span class="s1">&#39;bronc&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;lung&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">),</span>
-         <span class="p">(</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">)]</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">'smoke'</span><span class="p">,</span> <span class="s1">'lung'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'smoke'</span><span class="p">,</span> <span class="s1">'bronc'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'lung'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">'bronc'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">)]</span>
 
 <span class="c1"># With th edges, we can make a bayesian DAG by simply running the following line.</span>
 <span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">make_DAG</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -240,7 +240,7 @@ The states with highest probability are then returned.</p>
 <span class="c1"># Without the predict function we can only make a single inference at the time (see below).</span>
 <span class="c1"># To asses an entire dataframe, such as *Xtest*, it is a lot of work though.</span>
 
-<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span><span class="s1">&#39;xray&#39;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;smoke&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;lung&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span><span class="s1">'xray'</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="p">{</span><span class="s1">'smoke'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s1">'lung'</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">query</span><span class="o">.</span><span class="n">df</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
@@ -261,7 +261,7 @@ The states with highest probability are then returned.</p>
 <span class="c1"># In this case we are going to asses bronc and xray for the entire dataframe.</span>
 <span class="c1"># The inference on the dataset is performed sample-wise by using all the available nodes as evidence (obviously, with the exception of the node whose values we are predicting).</span>
 <span class="c1"># The states with highest probability are then returned.</span>
-<span class="n">Pout</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Xtest</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span><span class="s1">&#39;xray&#39;</span><span class="p">])</span>
+<span class="n">Pout</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">Xtest</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span><span class="s1">'xray'</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">Pout</span><span class="p">)</span>
 
 <span class="c1">#      bronc  xray         p</span>

@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Create%20DAG.html">Directed Acyclic Graphs</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Impute</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#knn-imputer">KNN Imputer</a></li>
@@ -149,7 +149,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -190,11 +190,11 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load the dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data-original&#39;</span><span class="p">,</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data-original'</span><span class="p">,</span>
                  <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mpg&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinders&#39;</span><span class="p">,</span> <span class="s1">&#39;displacement&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;acceleration&#39;</span><span class="p">,</span> <span class="s1">&#39;model year&#39;</span><span class="p">,</span> <span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;car name&#39;</span><span class="p">])</span>
+                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">,</span> <span class="s1">'cylinders'</span><span class="p">,</span> <span class="s1">'displacement'</span><span class="p">,</span> <span class="s1">'horsepower'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">,</span>
+                        <span class="s1">'acceleration'</span><span class="p">,</span> <span class="s1">'model year'</span><span class="p">,</span> <span class="s1">'origin'</span><span class="p">,</span> <span class="s1">'car name'</span><span class="p">])</span>
 
 <span class="c1"># Create some identical rows as test-case</span>
 <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -203,14 +203,14 @@
 
 <span class="c1"># Set few rows to None</span>
 <span class="n">index_nan</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
-<span class="n">carnames</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">carnames</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
 <span class="c1"># KNN imputer</span>
-<span class="n">dfnew</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">knn_imputer</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">string_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">])</span>
+<span class="n">dfnew</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">knn_imputer</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="s1">'distance'</span><span class="p">,</span> <span class="n">string_columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">])</span>
 <span class="c1"># Results</span>
-<span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dfnew</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">carnames</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dfnew</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">carnames</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -231,11 +231,11 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load the dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data-original&#39;</span><span class="p">,</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data-original'</span><span class="p">,</span>
                  <span class="n">delim_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mpg&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinders&#39;</span><span class="p">,</span> <span class="s1">&#39;displacement&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">,</span>
-                        <span class="s1">&#39;acceleration&#39;</span><span class="p">,</span> <span class="s1">&#39;model year&#39;</span><span class="p">,</span> <span class="s1">&#39;origin&#39;</span><span class="p">,</span> <span class="s1">&#39;car name&#39;</span><span class="p">])</span>
+                 <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">'mpg'</span><span class="p">,</span> <span class="s1">'cylinders'</span><span class="p">,</span> <span class="s1">'displacement'</span><span class="p">,</span> <span class="s1">'horsepower'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">,</span>
+                        <span class="s1">'acceleration'</span><span class="p">,</span> <span class="s1">'model year'</span><span class="p">,</span> <span class="s1">'origin'</span><span class="p">,</span> <span class="s1">'car name'</span><span class="p">])</span>
 
 <span class="c1"># Create some identical rows as test-case</span>
 <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -244,14 +244,14 @@
 
 <span class="c1"># Set few rows to None</span>
 <span class="n">index_nan</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
-<span class="n">carnames</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">carnames</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">df</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
 <span class="c1"># MICE imputer</span>
-<span class="n">dfnew</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">mice_imputer</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">string_columns</span><span class="o">=</span><span class="s1">&#39;car name&#39;</span><span class="p">)</span>
+<span class="n">dfnew</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">mice_imputer</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">string_columns</span><span class="o">=</span><span class="s1">'car name'</span><span class="p">)</span>
 <span class="c1"># Results</span>
-<span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dfnew</span><span class="p">[</span><span class="s1">&#39;car name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">carnames</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">dfnew</span><span class="p">[</span><span class="s1">'car name'</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index_nan</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">carnames</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
 <hr>

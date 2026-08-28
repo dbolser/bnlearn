@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Quickstart</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Quickstart.html">Installation (Quickstart)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#quick-examples">Quick Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Quickstart.html#comparison-between-bayesian-libraries">Comparison between Bayesian Libraries</a></li>
 </ul>
@@ -107,7 +107,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Other functionalities</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="independence_test.html">Independence test (guide)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Create%20DAG.html">Directed Acyclic Graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="impute.html">Impute</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DataFrames</a></li>
@@ -145,7 +145,7 @@
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Documentation.html#doc-sponsor">Sponsor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html#sponsor">Sponsor</a></li>
 </ul>
 
     <a href= "genindex.html">Index</a>
@@ -174,13 +174,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p><code class="docutils literal notranslate"><span class="pre">bnlearn</span></code> contains several examples within the library that can be used to practice with the functionalities of <a class="reference internal" href="bnlearn.structure_learning.html#module-bnlearn.structure_learning" title="bnlearn.structure_learning"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.structure_learning()</span></code></a>, <a class="reference internal" href="bnlearn.parameter_learning.html#module-bnlearn.parameter_learning" title="bnlearn.parameter_learning"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.parameter_learning()</span></code></a> and <a class="reference internal" href="bnlearn.inference.html#module-bnlearn.inference" title="bnlearn.inference"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.inference()</span></code></a>.</p>
+  <p><code class="docutils literal notranslate"><span class="pre">bnlearn</span></code> contains several examples within the library that can be used to practice with the functionalities of <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.structure_learning()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.parameter_learning()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.inference()</span></code>.</p>
 <section id="dataframes">
 <h1>DataFrames<a class="headerlink" href="#dataframes" title="Link to this heading"></a></h1>
 <p>The <strong>sprinkler</strong> dataset is one of the few internal datasets to import a pandas dataframe. This dataset is readily one-hot coded and without missing values. Therefore it does not require any further pre-processing steps. Note that</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Import dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">&#39;sprinkler&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">'sprinkler'</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="c1">#     Cloudy  Sprinkler  Rain  Wet_Grass</span>
@@ -201,23 +201,23 @@
 </section>
 <section id="import-dag-bif">
 <h1>Import DAG/BIF<a class="headerlink" href="#import-dag-bif" title="Link to this heading"></a></h1>
-<p>Each Bayesian DAG model that is loaded with <a class="reference internal" href="bnlearn.bnlearn.html#bnlearn.bnlearn.import_DAG" title="bnlearn.bnlearn.import_DAG"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.import_DAG()</span></code></a> is derived from a <em>bif</em> file. The <em>bif</em> file is a common format for Bayesian networks that can be used for the exchange of knowledge and experimental results in the community. More information can be found (here)[<a class="reference external" href="http://www.cs.washington.edu/dm/vfml/appendixes/bif.htm">http://www.cs.washington.edu/dm/vfml/appendixes/bif.htm</a>].</p>
+<p>Each Bayesian DAG model that is loaded with <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.import_DAG()</span></code> is derived from a <em>bif</em> file. The <em>bif</em> file is a common format for Bayesian networks that can be used for the exchange of knowledge and experimental results in the community. More information can be found (here)[<a class="reference external" href="http://www.cs.washington.edu/dm/vfml/appendixes/bif.htm">http://www.cs.washington.edu/dm/vfml/appendixes/bif.htm</a>].</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;sprinkler&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;alarm&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;andes&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;asia&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;pathfinder&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;sachs&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;miserables&#39;</span>
-<span class="n">bif_file</span><span class="o">=</span> <span class="s1">&#39;filepath/to/model.bif&#39;</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'sprinkler'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'alarm'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'andes'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'asia'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'pathfinder'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'sachs'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'miserables'</span>
+<span class="n">bif_file</span><span class="o">=</span> <span class="s1">'filepath/to/model.bif'</span>
 
 <span class="c1"># Loading DAG with model parameters from bif file.</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="n">bif_file</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>With the <a class="reference internal" href="bnlearn.bnlearn.html#bnlearn.bnlearn.sampling" title="bnlearn.bnlearn.sampling"><code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.sampling()</span></code></a> function a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> can be created for <em>n</em> samples.</p>
+<p>With the <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.sampling()</span></code> function a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> can be created for <em>n</em> samples.</p>
 </section>
 <section id="export-dag-bif">
 <h1>Export DAG/BIF<a class="headerlink" href="#export-dag-bif" title="Link to this heading"></a></h1>
@@ -228,14 +228,14 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Import dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">&#39;sprinkler&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s1">'sprinkler'</span><span class="p">)</span>
 <span class="c1"># build model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 
 <span class="c1"># Write to BIF</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">BIFWriter</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span>
-<span class="n">writer</span><span class="o">.</span><span class="n">write_bif</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;model.bif&#39;</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">BIFWriter</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">'model'</span><span class="p">])</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">write_bif</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">'model.bif'</span><span class="p">)</span>
 </pre></div>
 </div>
 <hr>

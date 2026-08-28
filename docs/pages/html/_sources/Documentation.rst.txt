@@ -3,11 +3,6 @@
 Documentation
 =============
 
-Sponsor
--------
-
-.. _doc-sponsor:
-
 .. include:: sponsor.rst
 
 Blog Posts
@@ -72,8 +67,8 @@ Citing bnlearn
 
 The BibTeX citation can be found in the right side menu at the `GitHub page <https://github.com/erdogant/bnlearn/>`_.
 
-References
-----------
+References (Documentation)
+---------------------------
 
 .. _doc-references:
 
