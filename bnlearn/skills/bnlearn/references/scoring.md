@@ -1,5 +1,27 @@
 # Structure Scoring
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> **During structure learning** (preferred):
+> ```python
+> DAG = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic')
+> # discrete:   bic | aic | k2 | bdeu | bds
+> # continuous: bic-g | aic-g | loglik-g
+> ```
+>
+> **Score an existing model**:
+> ```python
+> scores = bn.structure_scores(
+>     model, df,
+>     scoring_method=['bic', 'k2', 'bdeu', 'bds'],
+> )
+> ```
+>
+> Never mix discrete scores with continuous data (or Gaussian scores with
+> discrete data) without an explicit, justified conversion step.
+
+---
+
 Structure scores quantify how well a candidate Bayesian Network structure
 explains the observed data.
 

@@ -1,77 +1,70 @@
 # -*- coding: utf-8 -*-
+"""
+PC algorithm for constraint-based structure learning
+====================================================
 
-"""Example: PC algorithm for causal discovery.
+The PC algorithm learns a graph from conditional independence tests.
+In bnlearn it is exposed as methodtype='pc' (alias: 'cs' / 'constraintsearch').
 
-This example demonstrates how to use the PC algorithm to discover the
-structure of a Bayesian Network from observational data.
+CI-test settings belong in params_pc, not in scoretype.
 
-The PC algorithm is a constraint-based causal discovery method. It uses
-conditional independence tests to identify which variables are connected
-and then determines the orientation of edges based on conditional
-independencies and collider structures.
-
-The resulting graph is a CPDAG (Completed Partially Directed Acyclic Graph),
-which represents a Markov equivalence class of DAGs.
-
-Example
--------
-Run the example from the command line:
-
-    python pc_algorithm.py
-
-The example generates synthetic data from a known Bayesian Network,
-applies the PC algorithm, and visualizes the discovered structure.
+Workflow
+--------
+1. Load discrete data with known dependencies (sprinkler).
+2. Run PC with chi_square CI test.
+3. Inspect the returned keys (PC returns extra CPDAG-related fields).
+4. Compare with a score-based Hill Climb baseline.
 """
 
+import matplotlib
+matplotlib.use('Agg')
 import bnlearn as bn
 
 
-# =============================================================================
-# Generate synthetic data
-# =============================================================================
-
-# Define a simple Bayesian Network:
-#
-#       A       B
-#        \     /
-#         \   /
-#           C
-#           |
-#           D
-#
-# The network is intentionally small so that the discovered structure can
-# easily be compared with the ground truth.
-
-DAG = [
-    ("A", "C"),
-    ("B", "C"),
-    ("C", "D"),
-]
+# %% Data — use a dataset with real dependencies
+df = bn.import_example('sprinkler')
+print('\n[bnlearn] > Data shape:', df.shape)
+print(df.head())
 
 
-# Generate synthetic observations from the Bayesian Network.
-model = bn.make_DAG(DAG)
-
-df = bn.sampling(model, n=5000)
-
-
-# =============================================================================
-# PC algorithm
-# =============================================================================
-
-# Learn the network structure using the PC algorithm.
-#
-# The PC algorithm is constraint-based and relies on conditional
-# independence tests rather than a score function.
+# %% PC algorithm
+# Constraint-based: relies on conditional independence tests, not a score.
 model_pc = bn.structure_learning.fit(
     df,
-    methodtype="pc",
-    scoretype="bic",
+    methodtype='pc',
+    params_pc={'ci_test': 'chi_square', 'alpha': 0.05},
+    verbose=3,
 )
 
+print('\n[bnlearn] > PC return keys:', sorted(model_pc.keys()))
+print('[bnlearn] > model_edges:', model_pc.get('model_edges'))
+print('[bnlearn] > dag_edges:  ', model_pc.get('dag_edges'))
+print('[bnlearn] > pdag_edges: ', model_pc.get('pdag_edges'))
+print('[bnlearn] > undirected_edges:', model_pc.get('undirected_edges'))
 
-# =============================================================================
-# Visualize the discovered network
-# =============================================================================
 
-bn.plot(model_pc)
+# %% Compare with Hill Climbing (score-based)
+model_hc = bn.structure_learning.fit(
+    df,
+    methodtype='hc',
+    scoretype='bic',
+    verbose=0,
+)
+print('\n[bnlearn] > HC (bic) edges:', model_hc['model_edges'])
+print('[bnlearn] > PC edges:      ', model_pc.get('model_edges'))
+
+
+# %% Optional: prune edges that fail an independence test
+model_pruned = bn.independence_test(
+    model_hc, df,
+    test='chi_square',
+    alpha=0.05,
+    prune=True,
+    verbose=0,
+)
+print('\n[bnlearn] > HC edges after independence_test(prune=True):')
+print(model_pruned.get('model_edges'))
+
+print('\n' + '=' * 70)
+print('PC algorithm example completed successfully.')
+print('=' * 70)

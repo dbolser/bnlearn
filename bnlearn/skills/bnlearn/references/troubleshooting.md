@@ -1,5 +1,18 @@
 # Troubleshooting
 
+> **Most common agent errors (check these first)**
+>
+> | Symptom | Likely cause | Fix |
+> |---------|--------------|-----|
+> | `TypeError` / unexpected keyword | Used `method=` instead of `methodtype=` | Always `methodtype=` |
+> | Wrong / empty graph | Discrete score on continuous data (or vice-versa) | Use `bic-g` / `aic-g` / `loglik-g` for continuous |
+> | `ValueError` on inference/sampling | Invalid evidence variable or state | Check node names and CPD cardinalities |
+> | `ValueError` “gibbs … evidence” | `methodtype='gibbs'` + `evidence=` | Use `methodtype='bayes'` for conditional sampling |
+> | AttributeError on return value | Accessing non-existent keys | Use `model['model_edges']`, `model['adjmat']`, etc. |
+> | Inference fails | Parameter learning was skipped | Call `parameter_learning.fit` after structure learning |
+
+---
+
 This document provides a systematic troubleshooting guide for `bnlearn`.
 
 The objective is to diagnose problems by inspecting:

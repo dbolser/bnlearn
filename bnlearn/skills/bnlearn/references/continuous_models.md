@@ -1,5 +1,24 @@
 # Continuous Models
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> **Gaussian score-based structure learning**
+> ```python
+> DAG = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic-g')
+> # also: scoretype='aic-g' | 'loglik-g'
+> ```
+>
+> **LiNGAM causal discovery**
+> ```python
+> DAG = bn.structure_learning.fit(df, methodtype='direct-lingam')
+> # or methodtype='ica-lingam'
+> ```
+>
+> Do **not** use discrete scores (`bic`, `k2`, …) on continuous data.
+> Do **not** discretize automatically; prefer the continuous pathway first.
+
+---
+
 `bnlearn` supports continuous-data modeling through two distinct approaches:
 
 1. **Linear Gaussian Bayesian Network scoring**

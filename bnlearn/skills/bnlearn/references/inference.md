@@ -1,5 +1,26 @@
 # Inference
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> ```python
+> query = bn.inference.fit(
+>     model,                       # must already contain CPDs
+>     variables=['Target'],        # list of query variables
+>     evidence={'A': 1, 'B': 0},   # dict of observed states
+>     to_df=True,
+>     elimination_order='greedy',
+>     joint=True,
+>     verbose=3,
+> )
+> # query.df → DataFrame with columns = variables + 'p'
+> # bn.query2df(query, variables=[...]) for reshaping
+> ```
+>
+> Evidence variable names and states must exist in the model; otherwise a
+> `ValueError` is raised. Do **not** confuse this with intervention (`do`).
+
+---
+
 Inference is the process of asking conditional probability questions to a
 Bayesian Network.
 

@@ -1,5 +1,37 @@
 # Causal Discovery
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> **LiNGAM (continuous / mixed, causal orientation)**:
+> ```python
+> DAG = bn.structure_learning.fit(
+>     df,
+>     methodtype='direct-lingam',   # or 'ica-lingam'
+>     params_lingam={
+>         'random_state': None,
+>         'prior_knowledge': None,
+>         'apply_prior_knowledge_softly': False,
+>         'measure': 'pwling',
+>     },
+> )
+> ```
+>
+> **Constraint-based (PC)**:
+> ```python
+> DAG = bn.structure_learning.fit(
+>     df,
+>     methodtype='pc',
+>     params_pc={'ci_test': 'chi_square', 'alpha': 0.05},
+> )
+> ```
+>
+> A learned edge `X → Y` is **not** automatically a causal claim. Causal
+> interpretation requires additional assumptions (sufficiency, faithfulness,
+> no unmeasured confounding, etc.). Prefer the language “learned dependency
+> structure” unless those assumptions are stated.
+
+---
+
 Causal discovery is the process of using observational data and domain
 knowledge to estimate a directed graphical structure that represents potential
 causal relationships between variables.

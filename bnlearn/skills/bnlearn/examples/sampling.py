@@ -1,75 +1,70 @@
 # -*- coding: utf-8 -*-
+"""
+Sampling from a Bayesian Network
+================================
 
-"""Example: Sampling from a Bayesian Network.
+Generate synthetic observations with bn.sampling.
 
-This example demonstrates how to generate synthetic data from a Bayesian
-Network using bnlearn.
+Rules enforced by bnlearn
+-------------------------
+* methodtype='bayes' supports optional evidence (rejection sampling).
+* methodtype='gibbs' does NOT support evidence.
+* Evidence variable names and states must exist in the model.
+* Jointly impossible evidence raises ValueError.
 
-Sampling can be used to simulate observations from a fitted Bayesian
-Network. This is useful for generating synthetic datasets, validating
-models, performing simulations, and understanding the probabilistic
-behavior of a network.
-
-Example
--------
-Run the example from the command line:
-
-    python sampling.py
+Workflow
+--------
+1. Build a DAG (default uniform CPDs via make_DAG).
+2. Unconditional sampling.
+3. Conditional sampling with evidence.
+4. Gibbs sampling (no evidence).
 """
 
+import matplotlib
+matplotlib.use('Agg')
 import bnlearn as bn
 
 
-# =============================================================================
-# Define a Bayesian Network
-# =============================================================================
-
-# Define a simple Bayesian Network:
-#
-#       A       B
-#        \     /
-#         \   /
-#           C
-#           |
-#           D
-#
-DAG = [
-    ("A", "C"),
-    ("B", "C"),
-    ("C", "D"),
+# %% Network
+edges = [
+    ('A', 'C'),
+    ('B', 'C'),
+    ('C', 'D'),
 ]
-
-# =============================================================================
-# Create the Bayesian Network
-# =============================================================================
-
-# Create a Bayesian Network from the DAG.
-model = bn.make_DAG(DAG)
+model = bn.make_DAG(edges, verbose=0)
+print('[bnlearn] > Nodes:', list(model['model'].nodes()))
+print('[bnlearn] > Edges:', list(model['model'].edges()))
+print('[bnlearn] > CPDs:', len(model['model'].get_cpds()))
 
 
-# =============================================================================
-# Generate synthetic data
-# =============================================================================
-
-# Generate 5000 observations from the Bayesian Network.
-df = bn.sampling(
-    model,
-    n=5000,
-)
-
-
-# Display the first observations.
+# %% Unconditional sampling
+df = bn.sampling(model, n=1000, methodtype='bayes', verbose=0)
+print('\n[bnlearn] > Unconditional samples:', df.shape)
 print(df.head())
+print('\nValue counts:')
+for col in df.columns:
+    print(f'\n{col}:\n{df[col].value_counts()}')
 
 
-# Display the shape of the generated dataset.
-print("\nShape:")
-print(df.shape)
+# %% Conditional sampling (rejection) — methodtype must be 'bayes'
+cond = bn.sampling(
+    model,
+    n=200,
+    methodtype='bayes',
+    evidence={'A': 1, 'B': 0},
+    verbose=0,
+)
+print('\n[bnlearn] > Conditional samples (A=1, B=0):', cond.shape)
+assert (cond['A'] == 1).all()
+assert (cond['B'] == 0).all()
+print(cond.head())
 
 
-# Display basic statistics for the generated variables.
-print("\nValue counts:")
-for column in df.columns:
-    print(f"\n{column}:")
-    print(df[column].value_counts())
-    
+# %% Gibbs sampling (no evidence allowed)
+gibbs = bn.sampling(model, n=200, methodtype='gibbs', verbose=0)
+print('\n[bnlearn] > Gibbs samples:', gibbs.shape)
+print(gibbs.head())
+
+print('\n' + '=' * 70)
+print('Sampling example completed successfully.')
+print('=' * 70)

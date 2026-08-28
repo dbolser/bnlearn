@@ -1,5 +1,25 @@
 # Parameter Learning
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> ```python
+> model = bn.parameter_learning.fit(
+>     model,                  # output of structure_learning.fit / make_DAG / import_DAG
+>     df,                     # DataFrame
+>     methodtype='bayes',     # 'bayes' | 'ml' | 'maximumlikelihood'
+>     scoretype='bdeu',
+>     smooth=None,
+>     n_jobs=-1,
+>     verbose=3,
+> )
+> ```
+>
+> - Always run **after** structure learning (or after supplying a DAG).
+> - `methodtype='bayes'` is preferred when counts are sparse.
+> - After this call the model contains CPDs → ready for inference, prediction, sampling.
+
+---
+
 Parameter learning estimates the parameters of the conditional probability
 distributions (CPDs) for a given Bayesian Network structure.
 

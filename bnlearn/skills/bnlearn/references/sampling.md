@@ -1,33 +1,37 @@
 # Sampling
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> ```python
+> df_samples = bn.sampling(
+>     DAG,                     # model that already contains CPDs
+>     n=1000,
+>     methodtype='bayes',      # 'bayes' | 'gibbs'
+>     evidence=None,           # optional conditioning dict
+>     verbose=0,
+> )
+> ```
+>
+> Rules enforced by the library:
+> - `methodtype='gibbs'` does **not** accept `evidence`.
+> - Unknown evidence variables → `ValueError`.
+> - Evidence states outside the CPD support → `ValueError`.
+> - Jointly impossible evidence (zero probability) → `ValueError`.
+
+---
+
 Sampling generates synthetic data from a Bayesian Network.
 
 In `bnlearn`, sampling uses the probability distributions encoded in the
 network's Conditional Probability Distributions (CPDs) to generate new
 observations.
 
-The main interface is:
-
-```python
-bn.sampling(
-    DAG,
-    n=1000,
-    methodtype='bayes',
-    evidence=None,
-    verbose=0
-)
-```
-
 The function supports two sampling methods:
 
 ```text
-bayes
-gibbs
+bayes   – supports unconditional and conditional (rejection) sampling
+gibbs   – does not support evidence
 ```
-
-The `bayes` method supports both unconditional and conditional sampling.
-
-The `gibbs` method does not support conditioning on evidence.
 
 ---
 

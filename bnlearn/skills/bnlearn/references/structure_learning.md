@@ -1,5 +1,33 @@
 # Structure Learning
 
+> **Quick API (verified bnlearn ≥ 0.14)**
+>
+> ```python
+> model = bn.structure_learning.fit(
+>     df,
+>     methodtype='hc',          # NEVER use method= ; correct name is methodtype
+>     scoretype='bic',          # discrete: bic|aic|k2|bdeu|bds
+>                               # continuous: bic-g|aic-g|loglik-g
+>     black_list=None,
+>     white_list=None,
+>     bw_list_method=None,      # 'edges' | 'nodes' | None
+>     max_indegree=None,
+>     root_node=None,           # required for cl / chow-liu
+>     class_node=None,          # required for tan
+>     fixed_edges=None,
+>     params_pc={'ci_test': 'chi_square', 'alpha': 0.05},
+>     params_lingam={...},
+>     verbose=3,
+> )
+> ```
+>
+> **Return keys (score-based):** `model`, `model_edges`, `adjmat`, `config`, `structure_scores`  
+> **Extra keys (pc/cs):** `undirected`, `undirected_edges`, `pdag`, `pdag_edges`, `dag`, `dag_edges`
+>
+> After structure learning always call `bn.parameter_learning.fit(...)` before inference/sampling.
+
+---
+
 Structure learning estimates a Directed Acyclic Graph (DAG) from a dataset.
 The goal is to identify dependencies between variables without requiring the
 network structure to be specified in advance.
@@ -12,19 +40,19 @@ bn.structure_learning.fit()
 
 The implementation supports several families of structure-learning methods:
 
-* Score-based learning.
-* Constraint-based learning.
-* Hybrid/tree-based learning.
-* LiNGAM-based causal discovery.
+* Score-based learning (`hc`, `ex`)
+* Constraint-based learning (`pc`, `cs`)
+* Tree / classification (`cl`/`chow-liu`, `tan`, `nb`/`naivebayes`)
+* LiNGAM-based causal discovery (`direct-lingam`, `ica-lingam`)
 
 The appropriate method depends primarily on:
 
-* Variable type.
-* Number of variables.
-* Number of observations.
-* Whether conditional independence testing is desired.
-* Whether causal assumptions are appropriate.
-* Whether domain constraints are available.
+* Variable type
+* Number of variables
+* Number of observations
+* Whether conditional independence testing is desired
+* Whether causal assumptions are appropriate
+* Whether domain constraints are available
 
 ---
 
@@ -113,21 +141,19 @@ types before starting the search.
 
 Supported methods are:
 
-| `methodtype`    | Method                     | Data / use case                   |
-| --------------- | -------------------------- | --------------------------------- |
-| `hc`            | Hill Climbing              | General score-based learning      |
-| `ex`            | Exhaustive Search          | Very small networks               |
-| `pc`            | PC                         | Constraint-based learning         |
-| `cs`            | Constraint Search alias    | Constraint-based learning         |
-| `chow-liu`      | Chow-Liu                   | Tree-structured networks          |
-| `cl`            | Chow-Liu alias             | Tree-structured networks          |
-| `tan`           | Tree-Augmented Naive Bayes | Classification                    |
-| `nb`            | Naive Bayes                | Classification                    |
-| `naivebayes`    | Naive Bayes alias          | Classification                    |
-| `direct-lingam` | DirectLiNGAM               | Continuous/mixed causal discovery |
-| `ica-lingam`    | ICA-LiNGAM                 | Causal discovery                  |
+| `methodtype` (aliases)                | Method                     | Data / use case                   |
+| ------------------------------------- | -------------------------- | --------------------------------- |
+| `hc` / `hillclimbsearch`              | Hill Climbing              | General score-based learning      |
+| `ex` / `exhaustivesearch`             | Exhaustive Search          | Very small networks               |
+| `pc` / `cs` / `constraintsearch`      | PC / Constraint Search     | Constraint-based learning         |
+| `cl` / `chow-liu`                     | Chow-Liu                   | Tree-structured networks          |
+| `tan`                                 | Tree-Augmented Naive Bayes | Classification                    |
+| `nb` / `naivebayes`                   | Naive Bayes                | Classification                    |
+| `direct-lingam`                       | DirectLiNGAM               | Continuous/mixed causal discovery |
+| `ica-lingam`                          | ICA-LiNGAM                 | Causal discovery                  |
 
-These method names are explicitly validated by `bnlearn`.
+These method names (including long aliases) are explicitly validated by `bnlearn`.
+Prefer the short forms in new code.
 
 ---
 
@@ -1502,7 +1528,19 @@ print(result['adjmat'])
 bn.plot(result)
 ```
 
-The resulting structure can then be passed to parameter learning:
+**Recommended post-processing (from practice):** prune edges that fail a
+conditional independence test before estimating parameters:
+
+```python
+result = bn.independence_test(
+    result, df,
+    test='chi_square',
+    alpha=0.05,
+    prune=True,
+)
+```
+
+Then pass the (possibly pruned) structure to parameter learning:
 
 ```python
 model = bn.parameter_learning.fit(
@@ -1536,9 +1574,13 @@ these rules:
     are appropriate.
 12. Use domain constraints when they are known and justified.
 13. Validate the learned structure before interpreting it.
-14. Never equate a learned edge with causality without appropriate assumptions.
-15. Never invent bnlearn parameters or use an API from another Bayesian Network
+14. Consider `bn.independence_test(..., prune=True)` after structure learning
+    when the graph looks overly dense.
+15. Never equate a learned edge with causality without appropriate assumptions.
+16. Never invent bnlearn parameters or use an API from another Bayesian Network
     library.
+17. When the user already supplies the edge list, use `make_DAG` +
+    `parameter_learning.fit` — do not run structure learning.
 16. Check the installed bnlearn version when API behavior may differ.
 
 ---

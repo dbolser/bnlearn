@@ -191,6 +191,11 @@ Check whether categorical variables are represented consistently.
 Avoid unnecessarily creating a very large number of states because this can make
 parameter estimation unreliable.
 
+**High cardinality:** If a categorical column has many rare levels (e.g. job
+titles, product IDs, free-text codes), group rare levels into an `"Other"`
+category (or a domain-sensible bin) *before* structure learning. Large
+cardinality explodes CPD size and makes scores/CI tests unstable. See §18.10 D.
+
 ---
 
 ## 5.2 Continuous Variables
@@ -209,9 +214,16 @@ Inspect:
 * Nonlinear relationships.
 * Measurement scale.
 
-When the assumptions are appropriate, prefer a continuous/Gaussian Bayesian
-Network rather than unnecessarily discarding information through
-discretization.
+When the assumptions are appropriate, prefer continuous structure learning
+(`scoretype='bic-g'` / `'aic-g'` / `'loglik-g'`, or LiNGAM methods) rather
+than discarding information through discretization.
+
+**API limitation:** `parameter_learning.fit`, `inference.fit`, and
+`sampling` in bnlearn are built around **discrete** TabularCPDs. After
+continuous structure learning you obtain a DAG structure; do not expect
+the discrete parameter/inference/sampling pipeline to work unchanged on
+raw continuous columns. If discrete inference is required, discretize
+explicitly (see `bn.discretize`) and state that choice.
 
 See:
 
@@ -377,14 +389,32 @@ Also consider:
 
 When domain knowledge is available, use it to constrain the search space.
 
-Possible constraints include:
+```python
+DAG = bn.structure_learning.fit(
+    df,
+    methodtype='hc',
+    scoretype='bic',
+    black_list=[('A', 'B'), ('C', 'D')],   # forbidden edges
+    white_list=[('X', 'Y')],               # allowed edges (or nodes)
+    bw_list_method='edges',                # REQUIRED with black/white lists
+    max_indegree=3,                        # max parents per node
+    fixed_edges=[('Temp', 'Pressure')],    # edges that must be present
+)
+```
 
-* Whitelist edges.
-* Blacklist edges.
-* Maximum number of parents.
-* Forbidden directions.
-* Required relationships.
-* Temporal ordering.
+**Required:** if you pass `black_list` or `white_list`, you **must** also set
+`bw_list_method` to `'edges'` or `'nodes'`. Omitting it raises an Exception.
+
+**start_dag:** must include the **same variables as the dataset**. A partial
+DAG that omits nodes present in `df` raises `ValueError`.
+
+Possible constraints:
+
+* `black_list` / `white_list` (+ required `bw_list_method`)
+* `max_indegree`
+* `fixed_edges`
+* Starting structure via `start_dag` (full variable set)
+* Temporal / domain ordering encoded as black/white lists
 
 Constraints can substantially improve both computational efficiency and
 interpretability.
@@ -399,6 +429,11 @@ Only apply constraints supplied by the user or justified by the problem domain.
 
 Parameter learning estimates the probability distributions associated with a
 known network structure.
+
+```python
+model = bn.parameter_learning.fit(DAG, df, methodtype='bayes')
+# methodtype: 'bayes' (recommended when sparse) | 'ml' | 'maximumlikelihood'
+```
 
 The typical workflow is:
 
@@ -416,7 +451,8 @@ Fitted Bayesian Network
 ```
 
 Do not use parameter learning as a substitute for structure learning when the
-network structure is unknown.
+network structure is unknown. Always run it **after** `structure_learning.fit`
+(or after `make_DAG` / `import_DAG`) before inference, prediction, or sampling.
 
 See:
 
@@ -428,6 +464,16 @@ See:
 
 Use inference when the user wants to calculate probabilities conditioned on
 observed evidence.
+
+```python
+query = bn.inference.fit(
+    model,
+    variables=['Y'],
+    evidence={'X': 1},
+    to_df=True,
+)
+# query.df has columns = variables + 'p'
+```
 
 Typical problem:
 
@@ -456,11 +502,11 @@ Posterior distribution
 
 Clearly distinguish:
 
-* Prior probability.
-* Likelihood.
-* Posterior probability.
-* Marginal probability.
-* Conditional probability.
+* Prior probability
+* Likelihood
+* Posterior probability
+* Marginal probability
+* Conditional probability
 
 See:
 
@@ -493,6 +539,12 @@ Use sampling when the user wants to:
 * Explore the model distribution.
 * Perform simulation.
 * Generate conditional samples.
+
+```python
+samples = bn.sampling(model, n=1000, methodtype='bayes')
+# Conditional: bn.sampling(model, n=100, methodtype='bayes', evidence={'Rain': 1})
+# Gibbs does NOT support evidence
+```
 
 Sampling should use the fitted Bayesian Network rather than independently
 sampling each variable.
@@ -672,16 +724,19 @@ model = bn.structure_learning.fit(
 
 ### Supported `methodtype` values
 
-| methodtype        | Family              | Typical data          | Notes |
-|-------------------|---------------------|-----------------------|-------|
-| `hc`              | Score-based         | Discrete / continuous | Default. Hill Climbing |
-| `ex`              | Score-based         | Discrete (tiny nets)  | Exhaustive search |
-| `pc` / `cs`       | Constraint-based    | Discrete / continuous | PC algorithm |
-| `cl` / `chow-liu` | Tree                | Discrete              | Requires `root_node` |
-| `tan`             | Tree-Augmented NB   | Discrete              | Requires `root_node` + `class_node` |
-| `nb` / `naivebayes` | Naive Bayes       | Discrete              | Classification |
-| `direct-lingam`   | Causal (LiNGAM)     | Continuous / mixed    | Causal discovery |
-| `ica-lingam`      | Causal (LiNGAM)     | Continuous            | Causal discovery |
+| methodtype (aliases)              | Family              | Typical data          | Notes |
+|-----------------------------------|---------------------|-----------------------|-------|
+| `hc` / `hillclimbsearch`          | Score-based         | Discrete / continuous | Default. Hill Climbing |
+| `ex` / `exhaustivesearch`         | Score-based         | Discrete (tiny nets)  | Exhaustive search |
+| `pc` / `cs` / `constraintsearch`  | Constraint-based    | Discrete / continuous | PC algorithm |
+| `cl` / `chow-liu`                 | Tree                | Discrete              | Requires `root_node` |
+| `tan`                             | Tree-Augmented NB   | Discrete              | Requires `root_node` + `class_node` |
+| `nb` / `naivebayes`               | Naive Bayes         | Discrete              | Classification |
+| `direct-lingam`                   | Causal (LiNGAM)     | Continuous / mixed    | Causal discovery |
+| `ica-lingam`                      | Causal (LiNGAM)     | Continuous            | Causal discovery |
+
+Prefer the short forms (`hc`, `ex`, `pc`, `cl`) in new code. The long aliases
+are accepted by bnlearn and appear in older examples/blogs.
 
 ### Supported `scoretype` values
 
@@ -746,7 +801,29 @@ prediction and sampling.
 ## 18.3 Inference
 
 ```python
+query = bn.inference.fit(
+    model,                     # fitted model (after parameter learning) or DAG with CPDs
+    variables=['Target'],      # variables to query (list)
+    evidence={'A': 1, 'B': 0}, # evidence dict (state values)
+    to_df=True,                # return a DataFrame-friendly object
+    elimination_order='greedy',
+    joint=True,
+    groupby=None,
+    plot=False,
+    verbose=3,
+)
+```
 
+- Evidence values must be valid states of the variables.
+- For a pure marginal (no evidence), pass `evidence={}` — do **not** omit the
+  argument or pass `None` (current bnlearn calls `evidence.keys()` and will
+  raise `AttributeError`).
+- When `to_df=True` the result has a `.df` attribute with columns = variables + `p`.
+- Use `bn.query2df(query, variables=[...])` to reshape.
+
+**Pattern: inference on a hand-built DAG with placeholder CPDs**
+
+```python
 edges = [
     ('Cloudy', 'Sprinkler'),
     ('Cloudy', 'Rain'),
@@ -754,20 +831,18 @@ edges = [
     ('Rain', 'Wet_Grass'),
 ]
 
-# Genrate Placeholder CPDs
+# Generate placeholder CPDs (uniform by default)
 CPD = bn.build_cpts_from_structure(edges, variable_card=2)
 
-# Create DAG with default CPD values
+# Create DAG with those CPDs
 DAG = bn.make_DAG(edges, CPD=CPD)
 
-# Do the inference
-query = bn.inference.fit(DAG, variables=['Wet_Grass'], evidence={'Rain': 1, 'Sprinkler': 0, 'Cloudy': 1})
-
+query = bn.inference.fit(
+    DAG,
+    variables=['Wet_Grass'],
+    evidence={'Rain': 1, 'Sprinkler': 0, 'Cloudy': 1},
+)
 ```
-
-- Evidence values must be valid states of the variables.
-- When `to_df=True` the result has a `.df` attribute with columns = variables + `p`.
-- Use `bn.query2df(query, variables=[...])` to reshape.
 
 ---
 
@@ -807,7 +882,7 @@ yhat = bn.predict(
 ## 18.6 Building / loading a DAG by hand
 
 ```python
-# From edge list
+# From edge list (optionally with CPDs)
 DAG = bn.make_DAG(
     edges,                     # list of (parent, child) tuples
     CPD=None,                  # optional list of TabularCPD
@@ -815,6 +890,13 @@ DAG = bn.make_DAG(
     checkmodel=True,
     verbose=3,
 )
+
+# Generate uniform placeholder CPDs for a structure
+CPDs = bn.build_cpts_from_structure(edges, variable_card=2)
+DAG = bn.make_DAG(edges, CPD=CPDs)
+
+# Single-node CPT (optionally with a rulebook)
+cpt = bn.generate_cpt('Y', parents=['X'], variable_card=2)
 
 # From built-in example network
 DAG = bn.import_DAG('sprinkler')   # also: 'asia', 'alarm', ...
@@ -827,10 +909,22 @@ df  = bn.import_example('sprinkler')
 
 ```python
 # Conditional independence test on a learned model
-bn.independence_test(model, df, test='chi_square', alpha=0.05, prune=False)
+# prune=True removes edges that fail the significance test (common post-processing step)
+model = bn.independence_test(
+    model, df,
+    test='chi_square',   # also: 'pearsonr', 'g_sq', 'log_likelihood', ...
+    alpha=0.05,
+    prune=True,
+)
 
 # Discretize continuous columns given a structure
-df_disc = bn.discretize(df, edges, ['Cloudy', 'Sprinkler'], max_iterations=8)
+# continuous_columns must be a list of column names that are continuous
+df_disc = bn.discretize(
+    df,
+    edges,
+    continuous_columns=['Age', 'Income'],
+    max_iterations=8,
+)
 
 # One-hot / numeric encoding helper
 dfhot, dfnum = bn.df2onehot(df)
@@ -874,6 +968,92 @@ samples = bn.sampling(model, n=1000)
 
 Always keep structure learning and parameter learning as two distinct steps
 unless the user already supplies a fully specified DAG with CPDs.
+
+---
+
+## 18.10 Canonical workflows from practice (blog patterns)
+
+These patterns appear repeatedly in real bnlearn tutorials and should be
+preferred when they match the user’s goal.
+
+### A. Expert-knowledge-first (no structure learning)
+
+When the user (or domain expert) already knows the causal / dependency
+structure:
+
+```python
+edges = [
+    ('Cloudy', 'Sprinkler'),
+    ('Cloudy', 'Rain'),
+    ('Sprinkler', 'Wet_Grass'),
+    ('Rain', 'Wet_Grass'),
+]
+DAG = bn.make_DAG(edges)
+model = bn.parameter_learning.fit(DAG, df, methodtype='bayes')
+bn.print_CPD(model)
+q = bn.inference.fit(model, variables=['Wet_Grass'],
+                     evidence={'Rain': 1, 'Sprinkler': 0})
+```
+
+Do **not** run `structure_learning.fit` when the structure is already given.
+
+### B. Data-driven structure → prune → parameters → “chat with the data”
+
+```python
+model = bn.structure_learning.fit(df, methodtype='hc', scoretype='bic')
+# Optional but recommended: drop edges that fail a CI test
+model = bn.independence_test(model, df, test='chi_square', alpha=0.05, prune=True)
+model = bn.parameter_learning.fit(model, df, methodtype='bayes')
+
+# Ask probability questions (the “chat with your dataset” pattern)
+q1 = bn.inference.fit(model, variables=['salary'], evidence={'education': 'Doctorate'})
+q2 = bn.inference.fit(model, variables=['salary'], evidence={'education': 'HS-grad'})
+```
+
+### C. Compare several structure learners / scores
+
+When the user asks which method or score is better, or wants robustness:
+
+```python
+models = {
+    'hc_bic':  bn.structure_learning.fit(df, methodtype='hc', scoretype='bic'),
+    'hc_k2':   bn.structure_learning.fit(df, methodtype='hc', scoretype='k2'),
+    'hc_bdeu': bn.structure_learning.fit(df, methodtype='hc', scoretype='bdeu'),
+    'cs_bic':  bn.structure_learning.fit(df, methodtype='cs', scoretype='bic'),
+    'cl':      bn.structure_learning.fit(df, methodtype='cl', root_node='Cloudy'),
+}
+for name, m in models.items():
+    print(name, m['model_edges'])
+```
+
+### D. High-cardinality / messy categoricals before structure learning
+
+Structure learning degrades when categorical variables have dozens of rare
+levels. From practice:
+
+1. Inspect `df[col].value_counts()`.
+2. Group rare levels into an `"Other"` (or domain-sensible) category.
+3. Drop or bin continuous columns that should not enter a discrete BN
+   (or switch to continuous scores / LiNGAM instead of discretizing blindly).
+4. Only then call `structure_learning.fit`.
+
+```python
+# Example: collapse rare job titles
+counts = df['job_title'].value_counts()
+rare = counts[counts < 30].index
+df['job_title'] = df['job_title'].where(~df['job_title'].isin(rare), 'Other')
+```
+
+### E. Prediction vs intervention (prescriptive framing)
+
+- **Prediction / inference:** `P(Y | X = x)` → `bn.inference.fit` or `bn.predict`
+- **Intervention:** `P(Y | do(X = x))` → requires a causal interpretation of the
+  DAG and appropriate adjustment; do **not** answer an intervention question
+  with ordinary conditioning.
+
+If the user asks “what happens if we *force* / *set* / *change* X?”, treat it
+as interventional and state the extra assumptions (see §13–14 and
+`references/causal_discovery.md`).
 
 ---
 
@@ -1049,14 +1229,21 @@ Check:
 * Variable types.
 * Missing values.
 * Score selection.
-* Independence test.
-* Significance level.
-* Search constraints.
+* Independence test / significance level.
+* Search constraints (`black_list`, `white_list`, `max_indegree`).
 * Maximum parent count.
 * Sample size.
-* Outliers.
-* Transformations.
+* Outliers / transformations.
 * Algorithm assumptions.
+* High-cardinality categoricals (group rare levels).
+
+**Too many edges after structure learning:** run
+
+```python
+model = bn.independence_test(model, df, test='chi_square', alpha=0.05, prune=True)
+```
+
+before parameter learning. This is a standard post-processing step in practice.
 
 ---
 

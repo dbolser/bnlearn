@@ -17,6 +17,8 @@ Workflow
 """
 
 # %% Libraries
+import matplotlib
+matplotlib.use('Agg')
 import bnlearn as bn
 
 
@@ -47,11 +49,8 @@ print('\n[bnlearn] > Learned DAG:')
 print(DAG['model_edges'])
 
 
-# %% Plot learned structure
-bn.plot(DAG)
-
-# %% Plot learned structure using graphviz
-bn.plot_graphviz(DAG)
+# %% Plot learned structure (static; avoid interactive backends in scripts)
+bn.plot(DAG, params_static={'showplot': False})
 
 
 # %% Parameter learning
@@ -79,9 +78,7 @@ for cpd in model['model'].get_cpds():
 
 
 # %% Plot Bayesian Network
-bn.plot(model)
-# or
-bn.plot_graphviz(DAG)
+bn.plot(model, params_static={'showplot': False})
 
 
 # %% Exact inference
