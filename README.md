@@ -144,13 +144,13 @@ Installation of bnlearn skills for various harnesses. Default is .claude
 ##### Install skill (default claude)
 
 ```bash
-bnlearn skill install 
+bnlearn install skill 
 ```
 
 ##### Install skill: harnass options {claude, opencode agents or any other name}
 
 ```bash
-bnlearn skill install --harness opencode
+bnlearn install skill --harness opencode
 ```
 
 

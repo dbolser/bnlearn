@@ -114,14 +114,14 @@ The simplest way to install bnlearn skills in your working directory is:
 
 .. code-block:: console
 
-    bnlearn skill install 
+    bnlearn install skill 
 
 Change the harness with the -harness argument:
 Default: claude but opencode agents or any other name is allowed.
 
 .. code-block:: console
      
-     bnlearn skill install --harness opencode
+     bnlearn install skill --harness opencode
     
     
 Troubleshooting Import Errors
