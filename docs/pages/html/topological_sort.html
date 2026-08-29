@@ -202,15 +202,15 @@ A topological ordering is, simply said, just a valid sequence for the tasks. In 
 
 <span class="c1"># Set Edges in graph</span>
 <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span>
-     <span class="p">(</span><span class="s1">'0'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'0'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'1'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'2'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'5'</span><span class="p">,</span> <span class="s1">'3'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'5'</span><span class="p">,</span> <span class="s1">'4'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'6'</span><span class="p">,</span> <span class="s1">'1'</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">'6'</span><span class="p">,</span> <span class="s1">'5'</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">,</span> <span class="s1">&#39;4&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;6&#39;</span><span class="p">,</span> <span class="s1">&#39;5&#39;</span><span class="p">),</span>
      <span class="p">]</span>
 
 <span class="c1"># Make the actual Bayesian DAG</span>
@@ -222,12 +222,12 @@ A topological ordering is, simply said, just a valid sequence for the tasks. In 
 <span class="c1"># Topological ordering of the entire graph</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">DAG</span><span class="p">)</span>
 
-<span class="c1"># ['0', '6', '1', '2', '5', '3', '4']</span>
+<span class="c1"># [&#39;0&#39;, &#39;6&#39;, &#39;1&#39;, &#39;2&#39;, &#39;5&#39;, &#39;3&#39;, &#39;4&#39;]</span>
 
 <span class="c1"># Topological ordering using starting point in graph</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="s1">'2'</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
 
-<span class="c1"># ['2', '3']</span>
+<span class="c1"># [&#39;2&#39;, &#39;3&#39;]</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id2">
@@ -243,11 +243,11 @@ A topological ordering is, simply said, just a valid sequence for the tasks. In 
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Import DAG</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'sprinkler'</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;sprinkler&#39;</span><span class="p">)</span>
 <span class="c1"># Generate data using the DAG</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="c1"># Structure learning</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'chow-liu'</span><span class="p">,</span> <span class="n">root_node</span><span class="o">=</span><span class="s1">'Wet_Grass'</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;chow-liu&#39;</span><span class="p">,</span> <span class="n">root_node</span><span class="o">=</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">)</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 <span class="c1"># Topological ordering of the entire graph</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">topological_sort</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>

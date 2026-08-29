@@ -220,7 +220,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="c1"># Load dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'auto_mpg'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;auto_mpg&#39;</span><span class="p">)</span>
 
 <span class="c1"># Print dataset overview</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -240,14 +240,14 @@
 <span class="c1"># [392 rows x 8 columns]</span>
 
 <span class="c1"># Define horsepower bins based on domain knowledge</span>
-<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">'horsepower'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'low'</span><span class="p">,</span> <span class="s1">'medium'</span><span class="p">,</span> <span class="s1">'high'</span><span class="p">]</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;high&#39;</span><span class="p">]</span>
 
 <span class="c1"># Discretize horsepower using the defined bins</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">'horsepower_category'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'horsepower'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Print the results</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">'horsepower'</span><span class="p">,</span> <span class="s1">'horsepower_category'</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;horsepower&#39;</span><span class="p">,</span> <span class="s1">&#39;horsepower_category&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 <span class="c1">#    horsepower horsepower_category</span>
 <span class="c1"># 0       130.0              medium</span>
 <span class="c1"># 1       165.0                high</span>
@@ -269,24 +269,24 @@
 <span class="n">dist</span> <span class="o">=</span> <span class="n">distfit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 
 <span class="c1"># Fit and transform the data</span>
-<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'acceleration'</span><span class="p">])</span>
+<span class="n">dist</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">])</span>
 
 <span class="c1"># Create visualization</span>
 <span class="n">dist</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Define bins based on distribution</span>
-<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'acceleration'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-        <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">'CII_min_alpha'</span><span class="p">],</span>
-        <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">'CII_max_alpha'</span><span class="p">],</span>
-        <span class="n">df</span><span class="p">[</span><span class="s1">'acceleration'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+        <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;CII_min_alpha&#39;</span><span class="p">],</span>
+        <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;CII_max_alpha&#39;</span><span class="p">],</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
 
 <span class="c1"># Discretize acceleration using the defined bins</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">'acceleration_category'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'acceleration'</span><span class="p">],</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">],</span>
                                    <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
-                                   <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">'fast'</span><span class="p">,</span> <span class="s1">'normal'</span><span class="p">,</span> <span class="s1">'slow'</span><span class="p">],</span>
+                                   <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fast&#39;</span><span class="p">,</span> <span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="s1">&#39;slow&#39;</span><span class="p">],</span>
                                    <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">'acceleration'</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;acceleration&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <table class="docutils align-center">
@@ -297,7 +297,7 @@
 </table>
 <p>For multiple continuous variables, we can automate the distribution fitting:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process all remaining columns</span>
-<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'mpg'</span><span class="p">,</span> <span class="s1">'displacement'</span><span class="p">,</span> <span class="s1">'weight'</span><span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mpg&#39;</span><span class="p">,</span> <span class="s1">&#39;displacement&#39;</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">]</span>
 
 <span class="c1"># Apply distribution fitting to each variable</span>
 <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
@@ -311,28 +311,28 @@
 
     <span class="c1"># Define bins based on distribution</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
-            <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">'CII_min_alpha'</span><span class="p">],</span>
-            <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">'CII_max_alpha'</span><span class="p">],</span>
+            <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;CII_min_alpha&#39;</span><span class="p">],</span>
+            <span class="n">dist</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;CII_max_alpha&#39;</span><span class="p">],</span>
             <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]</span>
 
     <span class="c1"># Discretize using the defined bins</span>
-    <span class="n">df</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="s1">'_category'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="s1">&#39;_category&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span>
                                  <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span>
-                                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">'low'</span><span class="p">,</span> <span class="s1">'medium'</span><span class="p">,</span> <span class="s1">'high'</span><span class="p">],</span>
+                                 <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="s1">&#39;high&#39;</span><span class="p">],</span>
                                  <span class="n">include_lowest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">del</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>After all continuous variables are categorized, the causal discovery approach for structure learning can be applied.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform structure learning</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'hc'</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute edge strength</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
 
 <span class="c1"># Create visualizations</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
-<span class="n">dotgraph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
+<span class="n">dotgraph</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
 <span class="n">dotgraph</span>
 </pre></div>
 </div>
@@ -351,7 +351,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Load dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'auto_mpg'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;auto_mpg&#39;</span><span class="p">)</span>
 
 <span class="c1"># Print dataset overview</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -372,14 +372,14 @@
 
 <span class="c1"># Define the edges</span>
 <span class="n">edges</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s2">"cylinders"</span><span class="p">,</span> <span class="s2">"displacement"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"displacement"</span><span class="p">,</span> <span class="s2">"model_year"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"displacement"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"displacement"</span><span class="p">,</span> <span class="s2">"horsepower"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"model_year"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"mpg"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"horsepower"</span><span class="p">,</span> <span class="s2">"acceleration"</span><span class="p">),</span>
-    <span class="p">(</span><span class="s2">"mpg"</span><span class="p">,</span> <span class="s2">"model_year"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;cylinders&quot;</span><span class="p">,</span> <span class="s2">&quot;displacement&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;model_year&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;horsepower&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;model_year&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;mpg&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;horsepower&quot;</span><span class="p">,</span> <span class="s2">&quot;acceleration&quot;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;mpg&quot;</span><span class="p">,</span> <span class="s2">&quot;model_year&quot;</span><span class="p">),</span>
 <span class="p">]</span>
 
 <span class="c1"># Create DAG based on edges</span>
@@ -395,7 +395,7 @@
 </figure>
 <p>We can now discretize the continuous columns as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set continuous columns as float</span>
-<span class="n">continuous_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"mpg"</span><span class="p">,</span> <span class="s2">"displacement"</span><span class="p">,</span> <span class="s2">"horsepower"</span><span class="p">,</span> <span class="s2">"weight"</span><span class="p">,</span> <span class="s2">"acceleration"</span><span class="p">]</span>
+<span class="n">continuous_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mpg&quot;</span><span class="p">,</span> <span class="s2">&quot;displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;horsepower&quot;</span><span class="p">,</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;acceleration&quot;</span><span class="p">]</span>
 
 <span class="c1"># Discretize the continuous columns</span>
 <span class="n">df_discrete</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">discretize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">continuous_columns</span><span class="p">,</span> <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -423,7 +423,7 @@
 <h2>Structure Learning (discretized data)<a class="headerlink" href="#structure-learning-discretized-data" title="Link to this heading"></a></h2>
 <p>We will learn the structure on the discretized continuous data. Note that the data is also discretized on a set of edges, which may introduce a bias in the learned structure.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Learn the structure</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_discrete</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'hc'</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">'bic'</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_discrete</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
 
 <span class="c1"># Perform independence test</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -431,8 +431,8 @@
 <span class="c1"># [bnlearn] &gt;Edge [weight &lt;-&gt; mpg] [P=0.999112] is excluded because it was not significant (P&lt;0.05) with [chi_square]</span>
 
 <span class="c1"># Create visualizations</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -452,7 +452,7 @@
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">parameter_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">DAG</span><span class="p">,</span> <span class="n">df_discrete</span><span class="p">)</span>
 
 <span class="c1"># Alternative: Use MLE method</span>
-<span class="c1"># model_mle = bn.parameter_learning.fit(DAG, df_discrete, methodtype="maximumlikelihood")</span>
+<span class="c1"># model_mle = bn.parameter_learning.fit(DAG, df_discrete, methodtype=&quot;maximumlikelihood&quot;)</span>
 </pre></div>
 </div>
 <p>After fitting the model on the DAG and dataframe, we can perform the independence test to remove any spurious edges and create a plot. In this case, the tooltips will contain the CPDs as these are computed with parameter learning.</p>
@@ -460,8 +460,8 @@
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Create visualizations</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">'pvalue'</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot_graphviz</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="s1">&#39;pvalue&#39;</span><span class="p">)</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -475,7 +475,7 @@
 </table>
 <iframe src="https://erdogant.github.io/docs/d3blocks/bnlearn_continous_example_2.html" height="700px" width="750px", frameBorder="0"></iframe><p>There are various ways to investigate the results further, such as examining the CPDs.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print CPDs</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">get_cpds</span><span class="p">(</span><span class="s2">"mpg"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_cpds</span><span class="p">(</span><span class="s2">&quot;mpg&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -511,8 +511,8 @@
 </tbody>
 </table>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print weight categories</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Weight categories: "</span><span class="p">,</span> <span class="n">df_disc</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
-<span class="c1"># Weight categories:  IntervalIndex([(1577.73, 2217.0], (2217.0, 2959.5], (2959.5, 3657.5], (3657.5, 5140.0]], dtype='interval[float64, right]')</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Weight categories: &quot;</span><span class="p">,</span> <span class="n">df_disc</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">categories</span><span class="p">)</span>
+<span class="c1"># Weight categories:  IntervalIndex([(1577.73, 2217.0], (2217.0, 2959.5], (2959.5, 3657.5], (3657.5, 5140.0]], dtype=&#39;interval[float64, right]&#39;)</span>
 </pre></div>
 </div>
 </section>
@@ -520,12 +520,12 @@
 <h2>Making Inferences<a class="headerlink" href="#making-inferences" title="Link to this heading"></a></h2>
 <p>Making inferences can be performed using the fitted model. Note that the evidence should be discretized, for which we can use the <code class="docutils literal notranslate"><span class="pre">discretize_value</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Discretize evidence</span>
-<span class="n">evidence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"weight"</span><span class="p">:</span> <span class="n">bn</span><span class="o">.</span><span class="n">discretize_value</span><span class="p">(</span><span class="n">df_discrete</span><span class="p">[</span><span class="s2">"weight"</span><span class="p">],</span> <span class="mf">3000.0</span><span class="p">)}</span>
+<span class="n">evidence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="n">bn</span><span class="o">.</span><span class="n">discretize_value</span><span class="p">(</span><span class="n">df_discrete</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">],</span> <span class="mf">3000.0</span><span class="p">)}</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">evidence</span><span class="p">)</span>
-<span class="c1"># {'weight': Interval(2959.5, 3657.5, closed='right')}</span>
+<span class="c1"># {&#39;weight&#39;: Interval(2959.5, 3657.5, closed=&#39;right&#39;)}</span>
 
 <span class="c1"># Perform inference</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s2">"mpg"</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="n">evidence</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bn</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mpg&quot;</span><span class="p">],</span> <span class="n">evidence</span><span class="o">=</span><span class="n">evidence</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 </pre></div>
 </div>
 <table class="docutils align-default">

@@ -211,7 +211,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 
 <span class="c1"># Load example dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'asia'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
 
 <span class="c1"># Learn the network structure</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -223,10 +223,10 @@
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
        <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
        <span class="n">params_interactive</span><span class="o">=</span><span class="p">{</span>
-           <span class="s1">'height'</span><span class="p">:</span> <span class="s1">'800px'</span><span class="p">,</span>
-           <span class="s1">'width'</span><span class="p">:</span> <span class="s1">'70%'</span><span class="p">,</span>
-           <span class="s1">'layout'</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-           <span class="s1">'bgcolor'</span><span class="p">:</span> <span class="s1">'#0f0f0f0f'</span>
+           <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="s1">&#39;800px&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="s1">&#39;70%&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;layout&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+           <span class="s1">&#39;bgcolor&#39;</span><span class="p">:</span> <span class="s1">&#39;#0f0f0f0f&#39;</span>
        <span class="p">})</span>
 </pre></div>
 </div>
@@ -239,10 +239,10 @@
 Apply the same color and size to all nodes in the network:</p></li>
 </ol>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set uniform node color</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">'#8A0707'</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;#8A0707&#39;</span><span class="p">)</span>
 
 <span class="c1"># Set uniform node color and size</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">'#8A0707'</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;#8A0707&#39;</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id1">
@@ -261,10 +261,10 @@ Customize specific nodes with different colors and sizes:</p></li>
 <span class="n">node_properties</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">get_node_properties</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Customize specific nodes</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'xray'</span><span class="p">][</span><span class="s1">'node_color'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'#8A0707'</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'xray'</span><span class="p">][</span><span class="s1">'node_size'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'node_color'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'#000000'</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'node_size'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">35</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;node_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#8A0707&#39;</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;node_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#000000&#39;</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">35</span>
 
 <span class="c1"># Create plot with customized node properties</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">node_properties</span><span class="o">=</span><span class="n">node_properties</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -291,14 +291,14 @@ Customize specific nodes with different colors and sizes:</p></li>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
        <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
        <span class="n">params_static</span><span class="o">=</span><span class="p">{</span>
-           <span class="s1">'width'</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
-           <span class="s1">'height'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-           <span class="s1">'font_size'</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
-           <span class="s1">'font_family'</span><span class="p">:</span> <span class="s1">'times new roman'</span><span class="p">,</span>
-           <span class="s1">'alpha'</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
-           <span class="s1">'node_shape'</span><span class="p">:</span> <span class="s1">'o'</span><span class="p">,</span>
-           <span class="s1">'facecolor'</span><span class="p">:</span> <span class="s1">'white'</span><span class="p">,</span>
-           <span class="s1">'font_color'</span><span class="p">:</span> <span class="s1">'#000000'</span>
+           <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+           <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+           <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+           <span class="s1">&#39;font_family&#39;</span><span class="p">:</span> <span class="s1">&#39;times new roman&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
+           <span class="s1">&#39;node_shape&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;facecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;font_color&#39;</span><span class="p">:</span> <span class="s1">&#39;#000000&#39;</span>
        <span class="p">})</span>
 </pre></div>
 </div>
@@ -330,7 +330,7 @@ Customize specific nodes with different colors and sizes:</p></li>
 <h2>Network Comparison<a class="headerlink" href="#network-comparison" title="Link to this heading"></a></h2>
 <p>The library provides tools to compare different networks, which is particularly useful when comparing learned structures against ground truth or different learning methods:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load ground truth network</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'asia'</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
 
 <span class="c1"># Plot ground truth</span>
 <span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
@@ -339,16 +339,16 @@ Customize specific nodes with different colors and sizes:</p></li>
 <span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">sampling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
 
 <span class="c1"># Learn structure from data</span>
-<span class="n">model_sl</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">'hc'</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">'bic'</span><span class="p">)</span>
+<span class="n">model_sl</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">methodtype</span><span class="o">=</span><span class="s1">&#39;hc&#39;</span><span class="p">,</span> <span class="n">scoretype</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
 
 <span class="c1"># Compute edge strengths</span>
-<span class="n">model_sl</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model_sl</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">'chi_square'</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model_sl</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">independence_test</span><span class="p">(</span><span class="n">model_sl</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="s1">&#39;chi_square&#39;</span><span class="p">,</span> <span class="n">prune</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Plot learned structure</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_sl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">'pos'</span><span class="p">])</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model_sl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
 
 <span class="c1"># Compare networks</span>
-<span class="n">bn</span><span class="o">.</span><span class="n">compare_networks</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_sl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">'pos'</span><span class="p">])</span>
+<span class="n">bn</span><span class="o">.</span><span class="n">compare_networks</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_sl</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">G</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id5">
@@ -377,17 +377,17 @@ Customize specific nodes with different colors and sizes:</p></li>
 <p>Node properties can be customized using the <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.get_node_properties()</span></code> function:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load example data</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'asia'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
 <span class="c1"># Learn structure</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="c1"># Get current node properties</span>
 <span class="n">node_properties</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">get_node_properties</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Customize specific nodes</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'xray'</span><span class="p">][</span><span class="s1">'node_color'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'#8A0707'</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'xray'</span><span class="p">][</span><span class="s1">'node_size'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'node_color'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'#000000'</span>
-<span class="n">node_properties</span><span class="p">[</span><span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'node_size'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;node_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#8A0707&#39;</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;node_color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;#000000&#39;</span>
+<span class="n">node_properties</span><span class="p">[</span><span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;node_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2000</span>
 
 <span class="c1"># Create plot with customized nodes</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">node_properties</span><span class="o">=</span><span class="n">node_properties</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -406,7 +406,7 @@ Customize specific nodes with different colors and sizes:</p></li>
 <p>Edge properties can be customized using the <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.get_edge_properties()</span></code> function. These customizations can be combined with node properties for comprehensive network visualization.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load asia DAG</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">'asia'</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="s1">&#39;asia&#39;</span><span class="p">)</span>
 <span class="c1"># Structure learning of sampled dataset</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">structure_learning</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 <span class="c1"># Test for significance</span>
@@ -415,17 +415,17 @@ Customize specific nodes with different colors and sizes:</p></li>
 <span class="n">G</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Set some edge properties</span>
-<span class="c1"># Because the independence_test is used, the -log10(pvalues) from model['independence_test']['p_value'] are scaled between minscale=1 and maxscale=10</span>
+<span class="c1"># Because the independence_test is used, the -log10(pvalues) from model[&#39;independence_test&#39;][&#39;p_value&#39;] are scaled between minscale=1 and maxscale=10</span>
 <span class="n">edge_properties</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">get_edge_properties</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
 
 <span class="c1"># Make some changes</span>
-<span class="n">edge_properties</span><span class="p">[</span><span class="s1">'either'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">][</span><span class="s1">'color'</span><span class="p">]</span><span class="o">=</span><span class="s1">'#8A0707'</span>
-<span class="n">edge_properties</span><span class="p">[</span><span class="s1">'either'</span><span class="p">,</span> <span class="s1">'xray'</span><span class="p">][</span><span class="s1">'weight'</span><span class="p">]</span><span class="o">=</span><span class="mi">4</span>
-<span class="n">edge_properties</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span> <span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'weight'</span><span class="p">]</span><span class="o">=</span><span class="mi">15</span>
-<span class="n">edge_properties</span><span class="p">[</span><span class="s1">'bronc'</span><span class="p">,</span> <span class="s1">'smoke'</span><span class="p">][</span><span class="s1">'color'</span><span class="p">]</span><span class="o">=</span><span class="s1">'#8A0707'</span>
+<span class="n">edge_properties</span><span class="p">[</span><span class="s1">&#39;either&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;#8A0707&#39;</span>
+<span class="n">edge_properties</span><span class="p">[</span><span class="s1">&#39;either&#39;</span><span class="p">,</span> <span class="s1">&#39;xray&#39;</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">4</span>
+<span class="n">edge_properties</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span> <span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">15</span>
+<span class="n">edge_properties</span><span class="p">[</span><span class="s1">&#39;bronc&#39;</span><span class="p">,</span> <span class="s1">&#39;smoke&#39;</span><span class="p">][</span><span class="s1">&#39;color&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;#8A0707&#39;</span>
 
 <span class="c1"># Plot</span>
-<span class="n">params_static</span><span class="o">=</span><span class="p">{</span><span class="s1">'edge_alpha'</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s1">'arrowstyle'</span><span class="p">:</span><span class="s1">'-&gt;'</span><span class="p">,</span> <span class="s1">'arrowsize'</span><span class="p">:</span><span class="mi">60</span><span class="p">}</span>
+<span class="n">params_static</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;edge_alpha&#39;</span><span class="p">:</span><span class="mf">0.6</span><span class="p">,</span> <span class="s1">&#39;arrowstyle&#39;</span><span class="p">:</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;arrowsize&#39;</span><span class="p">:</span><span class="mi">60</span><span class="p">}</span>
 <span class="n">bn</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">interactive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">edge_properties</span><span class="o">=</span><span class="n">edge_properties</span><span class="p">,</span> <span class="n">params_static</span><span class="o">=</span><span class="n">params_static</span><span class="p">)</span>
 </pre></div>
 </div>

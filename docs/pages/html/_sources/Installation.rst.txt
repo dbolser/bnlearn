@@ -106,6 +106,24 @@ Then run the following code, which should generate a figure:
 
 .. figure:: ../figs/04_installation.png
 
+
+Install SKILLS
+-----------------------
+
+The simplest way to install bnlearn skills in your working directory is:
+
+.. code-block:: console
+
+    bnlearn skill install 
+
+Change the harness with the -harness argument:
+Default: claude but opencode agents or any other name is allowed.
+
+.. code-block:: console
+     
+     bnlearn skill install --harness opencode
+    
+    
 Troubleshooting Import Errors
 -----------------------------
 

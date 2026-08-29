@@ -206,12 +206,12 @@ In graph theory, a square matrix is used to represent a finite graph. The elemen
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Import DAG</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'sachs'</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;sachs&#39;</span><span class="p">)</span>
 <span class="c1"># Show the retrieved adjacency matrix for Sachs:</span>
-<span class="n">model</span><span class="p">[</span><span class="s1">'adjmat'</span><span class="p">]</span>
+<span class="n">model</span><span class="p">[</span><span class="s1">&#39;adjmat&#39;</span><span class="p">]</span>
 
 <span class="c1"># print</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">'adjmat'</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">[</span><span class="s1">&#39;adjmat&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Reading the table from left to right, we see that gene Erk is connected to Akt in a directed manner.
@@ -411,9 +411,9 @@ An example is illustrated below for which edges are defined when weights are Tru
 <p>Converting an adjacency matrix into vector with <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.adjmat2vec()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load DAG</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">)</span>
 <span class="c1"># Convert adjmat to vector:</span>
-<span class="n">vector</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">adjmat2vec</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">'adjmat'</span><span class="p">])</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">adjmat2vec</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">&#39;adjmat&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -446,7 +446,7 @@ An example is illustrated below for which edges are defined when weights are Tru
 <p>Converting the created vector in the example above back into an adjacency matrix with <code class="xref py py-func docutils literal notranslate"><span class="pre">bnlearn.bnlearn.vec2adjmat()</span></code></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Convert vector back to adjmat.</span>
-<span class="n">adjmat</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">vec2adjmat</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="s1">'source'</span><span class="p">],</span> <span class="n">vector</span><span class="p">[</span><span class="s1">'target'</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">vector</span><span class="p">[</span><span class="s1">'weight'</span><span class="p">])</span>
+<span class="n">adjmat</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">vec2adjmat</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">vector</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">vector</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -492,16 +492,16 @@ An example is illustrated below for which edges are defined when weights are Tru
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load DAG</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">)</span>
 <span class="c1"># Convert adjmat to vector:</span>
-<span class="n">adjmat_dict</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">adjmat2dict</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">'adjmat'</span><span class="p">])</span>
+<span class="n">adjmat_dict</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">adjmat2dict</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">&#39;adjmat&#39;</span><span class="p">])</span>
 <span class="c1"># print</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">adjmat_dict</span><span class="p">)</span>
 
-<span class="c1"># {'Cloudy': ['Sprinkler', 'Rain'],</span>
-<span class="c1">#  'Sprinkler': ['Wet_Grass'],</span>
-<span class="c1">#  'Rain': ['Wet_Grass'],</span>
-<span class="c1">#  'Wet_Grass': []}</span>
+<span class="c1"># {&#39;Cloudy&#39;: [&#39;Sprinkler&#39;, &#39;Rain&#39;],</span>
+<span class="c1">#  &#39;Sprinkler&#39;: [&#39;Wet_Grass&#39;],</span>
+<span class="c1">#  &#39;Rain&#39;: [&#39;Wet_Grass&#39;],</span>
+<span class="c1">#  &#39;Wet_Grass&#39;: []}</span>
 </pre></div>
 </div>
 </section>
@@ -511,9 +511,9 @@ An example is illustrated below for which edges are defined when weights are Tru
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load DAG</span>
-<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">'Sprinkler'</span><span class="p">)</span>
+<span class="n">DAG</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_DAG</span><span class="p">(</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">)</span>
 <span class="c1"># Extract edges from model and store in adjacency matrix</span>
-<span class="n">adjmat</span><span class="o">=</span><span class="n">bn</span><span class="o">.</span><span class="n">dag2adjmat</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">'model'</span><span class="p">])</span>
+<span class="n">adjmat</span><span class="o">=</span><span class="n">bn</span><span class="o">.</span><span class="n">dag2adjmat</span><span class="p">(</span><span class="n">DAG</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <table class="docutils align-default">
@@ -560,8 +560,8 @@ For demonstration purposes, A small example is created below for which can be se
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Create source-target edges with its weights</span>
-<span class="n">source</span><span class="o">=</span><span class="p">[</span><span class="s1">'Cloudy'</span><span class="p">,</span><span class="s1">'Cloudy'</span><span class="p">,</span><span class="s1">'Sprinkler'</span><span class="p">,</span><span class="s1">'Rain'</span><span class="p">]</span>
-<span class="n">target</span><span class="o">=</span><span class="p">[</span><span class="s1">'Sprinkler'</span><span class="p">,</span><span class="s1">'Rain'</span><span class="p">,</span><span class="s1">'Wet_Grass'</span><span class="p">,</span><span class="s1">'Wet_Grass'</span><span class="p">]</span>
+<span class="n">source</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span><span class="s1">&#39;Cloudy&#39;</span><span class="p">,</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span><span class="s1">&#39;Rain&#39;</span><span class="p">]</span>
+<span class="n">target</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Sprinkler&#39;</span><span class="p">,</span><span class="s1">&#39;Rain&#39;</span><span class="p">,</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">,</span><span class="s1">&#39;Wet_Grass&#39;</span><span class="p">]</span>
 <span class="n">weights</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
 <span class="c1"># Convert into sparse dataframe.</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">vec2df</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
@@ -626,9 +626,9 @@ The results is that 107 unique names are extracted with 4324 edges. This datafra
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import library</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">bnlearn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">bn</span>
 <span class="c1"># Load large example with source-target edges from the book A Storm of Swords</span>
-<span class="n">vec</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s2">"stormofswords"</span><span class="p">)</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">import_example</span><span class="p">(</span><span class="s2">&quot;stormofswords&quot;</span><span class="p">)</span>
 <span class="c1"># Convert into sparse dataframe.</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">vec2df</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="s1">'source'</span><span class="p">],</span> <span class="n">vec</span><span class="p">[</span><span class="s1">'target'</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="s1">'weight'</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">bn</span><span class="o">.</span><span class="n">vec2df</span><span class="p">(</span><span class="n">vec</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">],</span> <span class="n">vec</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">vec</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
 <span class="c1"># sparse matrix:</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="c1"># (4324, 107)</span>
