@@ -1,3 +1,8 @@
+---
+name: bnlearn
+description: Use this skill when working with bnlearn, a Python library for Bayesian networks, probabilistic graphical models, causal discovery, parameter learning, structure learning, inference, sampling, and directed acyclic graphs (DAG).
+---
+
 # bnlearn
 
 ## Purpose
@@ -70,7 +75,7 @@ A learned DAG should not automatically be interpreted as a causal graph.
 
 ---
 
-# 2. When to Use bnlearn
+# 2. When to Use bnlearn skill
 
 Use bnlearn when the task involves:
 
