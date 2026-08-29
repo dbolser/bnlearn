@@ -57,7 +57,7 @@ def install_skill(harness="claude"):
 
 
 def main():
-    """Command-line interface for bnlearn skills."""
+    """Command-line interface for bnlearn."""
     parser = argparse.ArgumentParser(
         prog="bnlearn",
         description="bnlearn command-line interface.",
@@ -65,6 +65,32 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
 
+    # ------------------------------------------------------------------
+    # bnlearn install ...
+    # ------------------------------------------------------------------
+    install_parser = subparsers.add_parser(
+        "install",
+        help="Install bnlearn components.",
+    )
+
+    install_subparsers = install_parser.add_subparsers(
+        dest="install_command",
+    )
+
+    skill_install_parser = install_subparsers.add_parser(
+        "skill",
+        help="Install the bnlearn Agent Skill.",
+    )
+
+    skill_install_parser.add_argument(
+        "--harness",
+        default="claude",
+        help="AI coding harness name (default: claude).",
+    )
+
+    # ------------------------------------------------------------------
+    # bnlearn skill ...
+    # ------------------------------------------------------------------
     skill_parser = subparsers.add_parser(
         "skill",
         help="Manage the bnlearn Agent Skill.",
@@ -74,17 +100,6 @@ def main():
         dest="skill_command",
     )
 
-    install_parser = skill_subparsers.add_parser(
-        "install",
-        help="Install the bnlearn Agent Skill.",
-    )
-
-    install_parser.add_argument(
-        "--harness",
-        default="claude",
-        help="AI coding harness name (default: claude).",
-    )
-
     skill_subparsers.add_parser(
         "path",
         help="Show the path to the bundled bnlearn Agent Skill.",
@@ -92,13 +107,17 @@ def main():
 
     args = parser.parse_args()
 
-    if args.command == "skill":
-        if args.skill_command == "install":
+    # bnlearn install skill
+    if args.command == "install":
+        if args.install_command == "skill":
             install_skill(harness=args.harness)
+        else:
+            install_parser.print_help()
 
-        elif args.skill_command == "path":
+    # bnlearn skill path
+    elif args.command == "skill":
+        if args.skill_command == "path":
             print(skill_path())
-
         else:
             skill_parser.print_help()
 
